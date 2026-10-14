@@ -1,0 +1,232 @@
+{% extends 'owner/base_owner.html' %}
+
+{% block title %}Executive Overview{% endblock %}
+{% block header_title %}Executive Command Center{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+    
+    <!-- Top KPI Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        
+        <!-- Logistics Revenue -->
+        <div class="bg-gradient-to-br from-[#10182C] to-[#1c2844] p-6 rounded-3xl border border-slate-800 shadow-lg relative overflow-hidden">
+            <div class="flex items-center justify-between text-xs text-slate-400 font-semibold mb-2">
+                <span>Logistics Revenue</span>
+                <span class="p-2 rounded-xl bg-amber-500/10 text-brand-orange">
+                    <i data-lucide="dollar-sign" class="w-4 h-4"></i>
+                </span>
+            </div>
+            <div class="text-3xl font-black font-mono text-white">${{ logistics_rev|floatformat:2 }}</div>
+            <div class="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5">
+                <span class="text-emerald-400 font-bold">✓ Paid waybills</span>
+                <span>• {{ delivered_shipments }} delivered</span>
+            </div>
+        </div>
+
+        <!-- Store Revenue -->
+        <div class="bg-gradient-to-br from-[#10182C] to-[#1c2844] p-6 rounded-3xl border border-slate-800 shadow-lg relative overflow-hidden">
+            <div class="flex items-center justify-between text-xs text-slate-400 font-semibold mb-2">
+                <span>E-Commerce Revenue</span>
+                <span class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
+                    <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                </span>
+            </div>
+            <div class="text-3xl font-black font-mono text-white">₦{{ store_rev|floatformat:2 }}</div>
+            <div class="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5">
+                <span class="text-emerald-400 font-bold">{{ total_orders }} Total Orders</span>
+                <span>• {{ total_products }} active items</span>
+            </div>
+        </div>
+
+        <!-- Active Cargo -->
+        <div class="bg-gradient-to-br from-[#10182C] to-[#1c2844] p-6 rounded-3xl border border-slate-800 shadow-lg relative overflow-hidden">
+            <div class="flex items-center justify-between text-xs text-slate-400 font-semibold mb-2">
+                <span>Active Cargo Waybills</span>
+                <span class="p-2 rounded-xl bg-orange-500/10 text-amber-400">
+                    <i data-lucide="plane" class="w-4 h-4"></i>
+                </span>
+            </div>
+            <div class="text-3xl font-black font-mono text-amber-400">{{ active_shipments }}</div>
+            <div class="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5">
+                <span>Total: <strong>{{ total_shipments }} shipments</strong></span>
+            </div>
+        </div>
+
+        <!-- Governance -->
+        <div class="bg-gradient-to-br from-[#10182C] to-[#1c2844] p-6 rounded-3xl border border-slate-800 shadow-lg relative overflow-hidden">
+            <div class="flex items-center justify-between text-xs text-slate-400 font-semibold mb-2">
+                <span>Governance & Hubs</span>
+                <span class="p-2 rounded-xl bg-blue-500/10 text-blue-400">
+                    <i data-lucide="shield" class="w-4 h-4"></i>
+                </span>
+            </div>
+            <div class="text-3xl font-black font-mono text-white">{{ total_moderators }} <span class="text-sm font-normal text-slate-400">Moderators</span></div>
+            <div class="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5">
+                <span>{{ total_routes }} Corridors • {{ total_warehouses }} Global Hubs</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Quick Owner Action Bar -->
+    <div class="p-6 rounded-3xl bg-[#10182C] border border-slate-800 flex flex-wrap items-center justify-between gap-4">
+        <div>
+            <h3 class="text-base font-bold text-white">Owner Operations Center</h3>
+            <p class="text-xs text-slate-400">Direct shortcuts to add staff, routes, hubs, and inventory</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+            <a href="{% url 'owner:moderators' %}" class="px-4 py-2.5 rounded-xl bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-orange-500/20">
+                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                <span>Provision Moderator</span>
+            </a>
+            <a href="{% url 'owner:route_create' %}" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-bold border border-white/10 transition flex items-center gap-1.5">
+                <i data-lucide="plus" class="w-4 h-4 text-brand-orange"></i>
+                <span>Add Route</span>
+            </a>
+            <a href="{% url 'owner:warehouses' %}" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-bold border border-white/10 transition flex items-center gap-1.5">
+                <i data-lucide="warehouse" class="w-4 h-4 text-brand-orange"></i>
+                <span>Add Warehouse Hub</span>
+            </a>
+            <a href="{% url 'owner:products' %}" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-bold border border-white/10 transition flex items-center gap-1.5">
+                <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i>
+                <span>Add Product</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Split Section: Recent Cargo Shipments & Recent Store Orders -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Shipments Oversight (8 cols) -->
+        <div class="lg:col-span-8 bg-[#10182C] rounded-3xl border border-slate-800 overflow-hidden shadow-lg">
+            <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                <div>
+                    <h3 class="text-base font-bold text-white">Live Cargo Shipments</h3>
+                    <p class="text-xs text-slate-400">Real-time status of cross-border waybills</p>
+                </div>
+                <a href="{% url 'owner:shipments' %}" class="text-xs font-bold text-brand-orange hover:underline">
+                    View All ({{ total_shipments }}) →
+                </a>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs text-slate-300">
+                    <thead class="bg-black/20 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-800">
+                        <tr>
+                            <th class="px-6 py-3.5">Waybill #</th>
+                            <th class="px-6 py-3.5">Customer</th>
+                            <th class="px-6 py-3.5">Route</th>
+                            <th class="px-6 py-3.5">Weight</th>
+                            <th class="px-6 py-3.5">Status</th>
+                            <th class="px-6 py-3.5">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60">
+                        {% for s in recent_shipments %}
+                        <tr class="hover:bg-white/5 transition">
+                            <td class="px-6 py-4 font-mono font-bold text-white">{{ s.tracking_number }}</td>
+                            <td class="px-6 py-4">
+                                <div class="font-semibold text-white">{{ s.customer.full_name }}</div>
+                                <div class="text-[10px] text-amber-400 font-mono">{{ s.customer.customer_code }}</div>
+                            </td>
+                            <td class="px-6 py-4">{{ s.route.origin_city }} → {{ s.route.destination_city }}</td>
+                            <td class="px-6 py-4 font-bold text-white">{{ s.weight_kg }} KG</td>
+                            <td class="px-6 py-4">
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 uppercase">
+                                    {{ s.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{% url 'owner:shipment_update' s.id %}" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-brand-orange text-white font-bold transition">
+                                    Override
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="px-6 py-8 text-center text-slate-500">No shipments found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Store Orders (4 cols) -->
+        <div class="lg:col-span-4 bg-[#10182C] rounded-3xl border border-slate-800 overflow-hidden shadow-lg flex flex-col justify-between">
+            <div>
+                <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-base font-bold text-white">Store Orders</h3>
+                        <p class="text-xs text-slate-400">Curated retail purchases</p>
+                    </div>
+                    <a href="{% url 'owner:orders' %}" class="text-xs font-bold text-brand-orange hover:underline">
+                        All Orders →
+                    </a>
+                </div>
+
+                <div class="divide-y divide-slate-800/60 p-2">
+                    {% for o in recent_orders %}
+                    <div class="p-4 hover:bg-white/5 rounded-2xl transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-mono font-bold text-xs text-white">{{ o.order_number }}</span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 uppercase">{{ o.get_status_display }}</span>
+                        </div>
+                        <div class="text-xs text-slate-400">{{ o.customer.full_name }} • {{ o.items.count }} item(s)</div>
+                        <div class="text-xs font-bold text-amber-400 mt-1">₦{{ o.total_amount|floatformat:2 }}</div>
+                    </div>
+                    {% empty %}
+                    <div class="p-6 text-center text-xs text-slate-500">No store orders yet.</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-slate-800 bg-black/20 text-center">
+                <a href="{% url 'owner:products' %}" class="text-xs font-bold text-slate-300 hover:text-white">
+                    Manage Store Inventory →
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Live Staff Audit Trail Stream -->
+    <div class="bg-[#10182C] rounded-3xl border border-slate-800 p-6 shadow-lg">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h3 class="text-base font-bold text-white">Live Staff Audit Trail</h3>
+                <p class="text-xs text-slate-400">Every action performed by moderators and staff members</p>
+            </div>
+            <a href="{% url 'owner:audit_logs' %}" class="text-xs font-bold text-brand-orange hover:underline">
+                Complete Audit Logs →
+            </a>
+        </div>
+
+        <div class="space-y-3">
+            {% for log in recent_logs %}
+            <div class="flex items-start justify-between gap-4 p-3.5 rounded-2xl bg-white/5 border border-white/5 text-xs">
+                <div class="flex items-start gap-3">
+                    <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-brand-orange flex items-center justify-center font-bold flex-shrink-0 mt-0.5">
+                        <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-white">
+                            {{ log.staff_user.full_name }} 
+                            <span class="text-[10px] text-slate-400 font-normal">({{ log.action_type }})</span>
+                        </div>
+                        <div class="text-slate-400 text-[11px] mt-0.5">{{ log.details }}</div>
+                    </div>
+                </div>
+                <div class="text-[10px] font-mono text-slate-500 whitespace-nowrap">
+                    {{ log.created_at|date:"M d, H:i" }}
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-xs text-slate-500 text-center py-4">No audit events recorded yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

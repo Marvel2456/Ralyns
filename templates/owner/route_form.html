@@ -1,0 +1,111 @@
+{% extends 'owner/base_owner.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block header_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-6">
+    <div>
+        <a href="{% url 'owner:routes' %}" class="text-xs font-bold text-slate-400 hover:text-white flex items-center gap-1 mb-2">
+            ← Back to Routes List
+        </a>
+        <h1 class="text-2xl font-extrabold text-white">{{ title }}</h1>
+        <p class="text-xs text-slate-400">Owner rate parameters for international freight corridors.</p>
+    </div>
+
+    <div class="bg-[#10182C] rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-xl text-white">
+        <form method="POST" class="space-y-5">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Origin Country</label>
+                    {{ form.origin_country }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Origin City</label>
+                    {{ form.origin_city }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Destination Country</label>
+                    {{ form.destination_country }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Destination City</label>
+                    {{ form.destination_city }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Freight Service Type</label>
+                    {{ form.freight_type }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Currency</label>
+                    {{ form.currency }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Rate Per KG ($)</label>
+                    {{ form.rate_per_kg }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Rate Per CBM ($ - Sea Cargo)</label>
+                    {{ form.rate_per_cbm }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Clearance Fee ($)</label>
+                    {{ form.clearance_fee }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Handling Fee ($)</label>
+                    {{ form.handling_fee }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Min Weight (KG)</label>
+                    {{ form.min_weight_kg }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Min Transit Days</label>
+                    {{ form.min_transit_days }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Max Transit Days</label>
+                    {{ form.max_transit_days }}
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Departure Schedule Description</label>
+                {{ form.departure_schedule }}
+            </div>
+
+            <div class="flex items-center gap-2 pt-2">
+                {{ form.is_active }}
+                <label class="text-xs font-bold text-slate-300">Route active for customer booking and calculators</label>
+            </div>
+
+            <div class="pt-5 border-t border-slate-800 flex items-center justify-end gap-3">
+                <a href="{% url 'owner:routes' %}" class="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold transition">
+                    Cancel
+                </a>
+                <button type="submit" class="px-6 py-2.5 bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold rounded-xl shadow-md transition">
+                    Save Shipping Corridor
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

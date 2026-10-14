@@ -1,0 +1,83 @@
+{% extends 'owner/base_owner.html' %}
+
+{% block title %}Manage Shipping Corridors{% endblock %}
+{% block header_title %}Cross-Border Corridors & Rates{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-extrabold text-white">Configured Trade Corridors</h1>
+            <p class="text-xs text-slate-400">Owner control of international origin-destination freight pricing and transit schedules.</p>
+        </div>
+
+        <a href="{% url 'owner:route_create' %}" class="px-5 py-3 rounded-2xl bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-orange-500/25">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Add New Shipping Route</span>
+        </a>
+    </div>
+
+    <div class="bg-[#10182C] rounded-3xl border border-slate-800 overflow-hidden shadow-lg">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-300">
+                <thead class="bg-black/30 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-800">
+                    <tr>
+                        <th class="px-6 py-4">Origin Hub</th>
+                        <th class="px-6 py-4">Destination</th>
+                        <th class="px-6 py-4">Service Type</th>
+                        <th class="px-6 py-4">Rate / KG</th>
+                        <th class="px-6 py-4">Rate / CBM</th>
+                        <th class="px-6 py-4">Transit Days</th>
+                        <th class="px-6 py-4">Schedule</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4 text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60">
+                    {% for r in routes %}
+                    <tr class="hover:bg-white/5 transition">
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-white">{{ r.origin_city }}</div>
+                            <div class="text-[10px] text-slate-400">{{ r.origin_country }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-white">{{ r.destination_city }}</div>
+                            <div class="text-[10px] text-slate-400">{{ r.destination_country }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400">
+                                {{ r.get_freight_type_display }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 font-mono font-bold text-white">
+                            {% if r.rate_per_kg > 0 %}${{ r.rate_per_kg }}{% else %}—{% endif %}
+                        </td>
+                        <td class="px-6 py-4 font-mono font-bold text-slate-300">
+                            {% if r.rate_per_cbm > 0 %}${{ r.rate_per_cbm }}{% else %}—{% endif %}
+                        </td>
+                        <td class="px-6 py-4 font-medium">{{ r.min_transit_days }} - {{ r.max_transit_days }} Days</td>
+                        <td class="px-6 py-4 text-[11px] text-slate-400">{{ r.departure_schedule }}</td>
+                        <td class="px-6 py-4">
+                            {% if r.is_active %}
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 uppercase">Active</span>
+                            {% else %}
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-700 text-slate-400 uppercase">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <a href="{% url 'owner:route_edit' r.id %}" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-brand-orange text-white text-xs font-bold transition">
+                                Edit Route
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="px-6 py-8 text-center text-slate-500">No routes configured yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,147 @@
+{% extends 'owner/base_owner.html' %}
+
+{% block title %}Manage Global Receiving Hubs{% endblock %}
+{% block header_title %}Global Warehouse Hubs{% endblock %}
+
+{% block content %}
+<div class="space-y-8" x-data="{ addHubModal: false }">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-extrabold text-white">Global Receiving Warehouses</h1>
+            <p class="text-xs text-slate-400">Overseas intake facilities in China, UK, Germany, and Nigeria.</p>
+        </div>
+
+        <button 
+            @click="addHubModal = true" 
+            class="px-5 py-3 rounded-2xl bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-orange-500/25">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Add New Receiving Hub</span>
+        </button>
+    </div>
+
+    <!-- Warehouse Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for w in warehouses %}
+        <div class="bg-[#10182C] rounded-3xl border border-slate-800 p-6 shadow-lg flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 uppercase font-mono">
+                        {{ w.country }}
+                    </span>
+                    {% if w.is_active %}
+                    <span class="text-[10px] font-bold text-emerald-400 flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Active Hub
+                    </span>
+                    {% else %}
+                    <span class="text-[10px] font-bold text-slate-500">Inactive</span>
+                    {% endif %}
+                </div>
+
+                <h3 class="text-base font-bold text-white mb-1">{{ w.name }}</h3>
+                <div class="text-xs text-slate-400 mb-4">{{ w.city }}, {{ w.country }}</div>
+
+                <div class="p-3.5 bg-black/30 rounded-2xl border border-white/5 text-xs text-slate-300 font-mono leading-relaxed space-y-1 mb-4">
+                    <div><strong>Address:</strong> {{ w.address_line }}</div>
+                    <div><strong>Contact:</strong> {{ w.contact_person }} ({{ w.contact_phone }})</div>
+                </div>
+
+                <div class="text-[11px] text-slate-400">
+                    <strong class="text-slate-300">Marking Instructions:</strong>
+                    <pre class="mt-1 p-2.5 rounded-xl bg-black/20 text-[10px] text-amber-300 font-mono whitespace-pre-wrap">{{ w.marking_instructions }}</pre>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-end">
+                <a href="{% url 'owner:warehouse_edit' w.id %}" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-bold transition">
+                    Edit Hub Settings
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-3 text-center py-12 text-slate-500">No warehouse hubs found.</div>
+        {% endfor %}
+    </div>
+
+    <!-- Add Hub Modal Dialog -->
+    <div x-show="addHubModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
+            <div class="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity" @click="addHubModal = false"></div>
+
+            <div class="inline-block bg-[#10182C] rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-xl sm:w-full border border-slate-800 p-6 sm:p-8 relative z-10 text-white">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-brand-orange flex items-center justify-center font-bold">
+                            <i data-lucide="warehouse" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Add Global Receiving Hub</h3>
+                    </div>
+                    <button @click="addHubModal = false" class="text-slate-400 hover:text-white">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <form method="POST" class="mt-6 space-y-4">
+                    {% csrf_token %}
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Warehouse Name</label>
+                        {{ form.name }}
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Country</label>
+                            {{ form.country }}
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">City</label>
+                            {{ form.city }}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Full Physical Address</label>
+                        {{ form.address_line }}
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Contact Person</label>
+                            {{ form.contact_person }}
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Contact Phone</label>
+                            {{ form.contact_phone }}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Marking Instructions on Packages</label>
+                        {{ form.marking_instructions }}
+                    </div>
+
+                    <div class="pt-2 flex items-center gap-4 text-xs font-bold">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            {{ form.is_receiving_hub }}
+                            <span>Accepts incoming customer cargo</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            {{ form.is_active }}
+                            <span>Active Hub</span>
+                        </label>
+                    </div>
+
+                    <div class="pt-5 border-t border-slate-800 flex items-center justify-end gap-3">
+                        <button type="button" @click="addHubModal = false" class="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold transition">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-6 py-2.5 bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                            <span>Save Warehouse</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

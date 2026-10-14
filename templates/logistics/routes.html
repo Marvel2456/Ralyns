@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Active Shipping Routes & Warehouses | Ralyn's International{% endblock %}
+
+{% block content %}
+<div class="py-12 bg-[#F8FAFC]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <span class="text-xs font-bold tracking-widest text-brand-orange uppercase">Active Network</span>
+            <h1 class="text-3xl font-extrabold text-brand-navy mt-1">International Routes & Hub Directory</h1>
+            <p class="text-slate-600 text-sm mt-2">All dynamic routes and overseas receiving addresses managed by Ralyn's.</p>
+        </div>
+
+        <!-- Routes Table -->
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm mb-16">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Configured Shipping Corridors</h2>
+                    <p class="text-xs text-slate-500">Regularly updated freight rates per KG and CBM</p>
+                </div>
+                <a href="{% url 'logistics:calculator' %}" class="text-xs font-bold text-brand-orange hover:underline">
+                    Rate Calculator →
+                </a>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-700">
+                    <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                        <tr>
+                            <th class="px-6 py-4">Origin Hub</th>
+                            <th class="px-6 py-4">Destination</th>
+                            <th class="px-6 py-4">Service Type</th>
+                            <th class="px-6 py-4">Rate / KG</th>
+                            <th class="px-6 py-4">Rate / CBM</th>
+                            <th class="px-6 py-4">Transit Time</th>
+                            <th class="px-6 py-4">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        {% for r in routes %}
+                        <tr class="hover:bg-slate-50/80 transition">
+                            <td class="px-6 py-4 font-bold text-slate-900">
+                                <div>{{ r.origin_city }}</div>
+                                <div class="text-xs text-slate-400 font-normal">{{ r.origin_country }}</div>
+                            </td>
+                            <td class="px-6 py-4 font-semibold text-slate-800">
+                                <div>{{ r.destination_city }}</div>
+                                <div class="text-xs text-slate-400 font-normal">{{ r.destination_country }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-brand-orange">
+                                    {{ r.get_freight_type_display }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 font-bold text-slate-900">
+                                {% if r.rate_per_kg > 0 %}${{ r.rate_per_kg }}{% else %}—{% endif %}
+                            </td>
+                            <td class="px-6 py-4 font-bold text-slate-900">
+                                {% if r.rate_per_cbm > 0 %}${{ r.rate_per_cbm }}{% else %}—{% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-xs font-medium text-slate-600">
+                                {{ r.min_transit_days }} - {{ r.max_transit_days }} Days
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{% url 'logistics:calculator' %}?route_id={{ r.id }}" class="px-3 py-1.5 rounded-lg bg-brand-navy hover:bg-slate-800 text-white text-xs font-bold transition">
+                                    Quote
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="px-6 py-8 text-center text-slate-500 text-xs">
+                                No routes configured yet. Admins can add routes via the Staff Portal.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Warehouses Directory -->
+        <div>
+            <h2 class="text-2xl font-extrabold text-brand-navy mb-6">Global Receiving Warehouses</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for w in warehouses %}
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-2xl bg-brand-navy text-white flex items-center justify-center font-bold text-sm mb-4">
+                            {{ w.country|slice:":2"|upper }}
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">{{ w.name }}</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">{{ w.city }}, {{ w.country }}</p>
+                        
+                        <div class="mt-4 p-3 bg-slate-50 rounded-xl text-xs text-slate-700 font-mono leading-relaxed">
+                            {{ w.address_line }}
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500">
+                        📞 {{ w.contact_phone|default:"Contact Customer Support" }}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-4 text-center py-8 text-slate-500 text-xs">
+                    Warehouse addresses will appear here once provisioned.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

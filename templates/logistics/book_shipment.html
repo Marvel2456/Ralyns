@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Cargo Shipment | Ralyn's International{% endblock %}
+
+{% block content %}
+<div class="py-12 bg-[#F8FAFC]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center mb-10">
+            <span class="text-xs font-bold tracking-widest text-brand-orange uppercase">Cargo Dispatch</span>
+            <h1 class="text-3xl font-extrabold text-brand-navy mt-1">Book a New Cargo Shipment</h1>
+            <p class="text-slate-600 text-sm mt-2">Generate your waybill and get tracking notifications automatically via Resend email.</p>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200">
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Shipping Route</label>
+                    {{ form.route }}
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Origin Receiving Hub</label>
+                    {{ form.origin_warehouse }}
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Cargo Contents & Carton Description</label>
+                    {{ form.cargo_description }}
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Weight (KG)</label>
+                        {{ form.weight_kg }}
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Volume (CBM)</label>
+                        {{ form.volume_cbm }}
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Packages Count</label>
+                        {{ form.pieces_count }}
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100">
+                    <h3 class="text-sm font-bold text-slate-900 mb-4">Recipient Information in Nigeria / Destination</h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Receiver Full Name</label>
+                            {{ form.receiver_name }}
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Receiver Phone / WhatsApp</label>
+                            {{ form.receiver_phone }}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Delivery Address or Pickup Hub</label>
+                        {{ form.receiver_address }}
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-4 bg-brand-orange hover:bg-brand-hoverOrange text-white font-bold rounded-2xl shadow-md transition flex items-center justify-center gap-2">
+                        <i data-lucide="check-circle" class="w-5 h-5"></i>
+                        <span>Confirm Booking & Generate Waybill</span>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

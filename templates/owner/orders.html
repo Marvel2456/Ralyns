@@ -1,0 +1,83 @@
+{% extends 'owner/base_owner.html' %}
+
+{% block title %}Manage Store Orders{% endblock %}
+{% block header_title %}E-Commerce Store Orders{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div>
+        <h1 class="text-2xl font-extrabold text-white">Customer Store Orders</h1>
+        <p class="text-xs text-slate-400">Track and fulfill product orders across Nigerian states.</p>
+    </div>
+
+    <div class="bg-[#10182C] rounded-3xl border border-slate-800 overflow-hidden shadow-lg">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-300">
+                <thead class="bg-black/30 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-800">
+                    <tr>
+                        <th class="px-6 py-4">Order #</th>
+                        <th class="px-6 py-4">Customer</th>
+                        <th class="px-6 py-4">Delivery Recipient & Address</th>
+                        <th class="px-6 py-4">Items Summary</th>
+                        <th class="px-6 py-4">Total Amount</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4 text-right">Update Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60">
+                    {% for o in orders %}
+                    <tr class="hover:bg-white/5 transition">
+                        <td class="px-6 py-4 font-mono font-bold text-white text-sm">
+                            {{ o.order_number }}
+                            <div class="text-[10px] text-slate-400 font-normal">{{ o.created_at|date:"M d, Y H:i" }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-white">{{ o.customer.full_name }}</div>
+                            <div class="text-[10px] text-amber-400 font-mono">{{ o.customer.customer_code }}</div>
+                            <div class="text-[10px] text-slate-400">{{ o.customer.email }}</div>
+                        </td>
+                        <td class="px-6 py-4 text-[11px] leading-relaxed max-w-xs">
+                            <div class="font-semibold text-white">{{ o.recipient_name }} ({{ o.recipient_phone }})</div>
+                            <div class="text-slate-400 truncate">{{ o.shipping_address }}</div>
+                            <div class="text-[10px] text-amber-400">{{ o.get_delivery_method_display }}</div>
+                        </td>
+                        <td class="px-6 py-4 text-[11px] text-slate-300">
+                            {% for item in o.items.all %}
+                            <div>• {{ item.quantity }}x {{ item.product_title }}</div>
+                            {% endfor %}
+                        </td>
+                        <td class="px-6 py-4 font-bold text-amber-400 font-mono text-sm">
+                            ₦{{ o.total_amount|floatformat:2 }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-400 uppercase">
+                                {{ o.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <form action="{% url 'owner:order_update_status' o.id %}" method="POST" class="inline-flex items-center gap-1.5">
+                                {% csrf_token %}
+                                <select name="status" class="px-2.5 py-1.5 rounded-lg bg-black/40 border border-slate-700 text-xs text-white focus:outline-none focus:ring-1 focus:ring-brand-orange">
+                                    <option value="PENDING" {% if o.status == 'PENDING' %}selected{% endif %}>Pending</option>
+                                    <option value="CONFIRMED" {% if o.status == 'CONFIRMED' %}selected{% endif %}>Confirmed</option>
+                                    <option value="DISPATCHED" {% if o.status == 'DISPATCHED' %}selected{% endif %}>Dispatched</option>
+                                    <option value="DELIVERED" {% if o.status == 'DELIVERED' %}selected{% endif %}>Delivered</option>
+                                    <option value="CANCELLED" {% if o.status == 'CANCELLED' %}selected{% endif %}>Cancelled</option>
+                                </select>
+                                <button type="submit" class="px-3 py-1.5 rounded-lg bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold transition">
+                                    Save
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="px-6 py-8 text-center text-slate-500">No store orders received yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

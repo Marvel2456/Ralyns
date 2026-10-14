@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-900 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Owner's Executive Dashboard{% endblock %} | Ralyn's International</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            navy: '#10182C',
+                            orange: '#D87808',
+                            steel: '#344054',
+                            slate: '#64748C',
+                            surface: '#F8FAFC',
+                            hoverOrange: '#B45309',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                        mono: ['monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- HTMX 2.0.4 -->
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <!-- Alpine.js 3.x -->
+    <script defer src="https://unpkg.com/alpinejs@3.14.3/dist/cdn.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="flex h-full bg-[#0B0F19] antialiased" x-data="{ sidebarOpen: false }">
+
+    <!-- Mobile Sidebar Backdrop -->
+    <div x-show="sidebarOpen" x-cloak class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" @click="sidebarOpen = false"></div>
+
+    <!-- Executive Sidebar -->
+    <aside 
+        :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+        class="fixed inset-y-0 left-0 z-50 w-72 bg-[#10182C] border-r border-slate-800/80 flex flex-col transition-transform duration-300 lg:static lg:translate-x-0">
+        
+        <!-- Sidebar Brand Header -->
+        <div class="h-20 flex items-center justify-between px-6 border-b border-slate-800/80">
+            <a href="{% url 'owner:dashboard' %}" class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/10 p-1.5 rounded-xl border border-white/10">
+                    <img src="/static/img/logo.png" alt="Ralyn's Logo" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <div class="text-lg font-black tracking-wider text-white">RALYN'S</div>
+                    <div class="text-[9px] tracking-[0.25em] font-bold text-amber-500 uppercase">OWNER CONSOLE</div>
+                </div>
+            </a>
+            <button @click="sidebarOpen = false" class="lg:hidden text-slate-400 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="flex-grow px-4 py-6 space-y-1.5 overflow-y-auto text-xs font-semibold">
+            
+            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-1">Executive Overview</div>
+            
+            <a href="{% url 'owner:dashboard' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if request.resolver_match.url_name == 'dashboard' %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                <span>Executive Dashboard</span>
+            </a>
+
+            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-4">Staff & Governance</div>
+            
+            <a href="{% url 'owner:moderators' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'moderator' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                <span>Manage Moderators</span>
+            </a>
+
+            <a href="{% url 'owner:audit_logs' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if request.resolver_match.url_name == 'audit_logs' %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+                <i data-lucide="activity" class="w-4 h-4"></i>
+                <span>Staff Audit Trail</span>
+            </a>
+
+            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-4">Cross-Border Logistics</div>
+
+            <a href="{% url 'owner:routes' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'route' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+                <i data-lucide="git-fork" class="w-4 h-4"></i>
+                <span>Corridors & Rates</span>
+            </a>
+
+            <a href="{% url 'owner:warehouses' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'warehouse' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+                <i data-lucide="warehouse" class="w-4 h-4"></i>
+                <span>Global Hubs</span>
+            </a>
+
+            <a href="{% url 'owner:shipments' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'shipment' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+                <i data-lucide="package-search" class="w-4 h-4"></i>
+                <span>Waybill Cargo</span>
+            </a>
+
+            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-4">Store & Commerce</div>
+
+            <a href="{% url 'owner:products' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'product' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                <span>Products & WebP Images</span>
+            </a>
+
+            <a href="{% url 'owner:orders' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'order' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+                <i data-lucide="receipt" class="w-4 h-4"></i>
+                <span>Store Orders</span>
+            </a>
+
+            <a href="{% url 'owner:customers' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if request.resolver_match.url_name == 'customers' %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                <span>Customer Directory</span>
+            </a>
+
+            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-4">System Links</div>
+
+            <a href="/admin/" target="_blank" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-white/5 hover:text-amber-400 transition">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="terminal" class="w-4 h-4 text-amber-500"></i>
+                    <span>Django Unfold Admin</span>
+                </div>
+                <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-500"></i>
+            </a>
+
+            <a href="{% url 'core:home' %}" target="_blank" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-white/5 hover:text-white transition">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="globe" class="w-4 h-4"></i>
+                    <span>View Public Store</span>
+                </div>
+                <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-500"></i>
+            </a>
+        </nav>
+
+        <!-- Owner Profile Footer -->
+        <div class="p-4 border-t border-slate-800/80 bg-black/20">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center font-bold text-xs">
+                        👑
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-white truncate max-w-[120px]">{{ user.full_name }}</div>
+                        <div class="text-[10px] text-amber-400 font-semibold uppercase">Business Owner</div>
+                    </div>
+                </div>
+                <a href="{% url 'accounts:logout' %}" class="p-2 text-slate-400 hover:text-red-400 transition" title="Logout">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- Main Content Layout -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        
+        <!-- Top Executive Navbar -->
+        <header class="h-20 bg-[#10182C]/80 backdrop-blur-md border-b border-slate-800/80 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+            <div class="flex items-center gap-4">
+                <button @click="sidebarOpen = true" class="lg:hidden p-2 text-slate-400 hover:text-white">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <div>
+                    <h2 class="text-lg font-bold text-white leading-tight">{% block header_title %}Owner's Command Center{% endblock %}</h2>
+                    <span class="text-xs text-slate-400">Ralyn's International Global Operations</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 sm:gap-4">
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Resend & Celery Active</span>
+                </div>
+                <a href="{% url 'core:home' %}" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs font-semibold border border-white/10 transition flex items-center gap-2">
+                    <i data-lucide="globe" class="w-3.5 h-3.5 text-brand-orange"></i>
+                    <span>Live Site</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Flash Messages -->
+        {% if messages %}
+        <div class="px-4 sm:px-8 pt-4">
+            {% for message in messages %}
+            <div class="p-4 mb-3 rounded-2xl flex items-center justify-between text-xs font-semibold shadow-sm border 
+                {% if message.tags == 'error' %}bg-red-950/60 text-red-200 border-red-800
+                {% elif message.tags == 'success' %}bg-emerald-950/60 text-emerald-200 border-emerald-800
+                {% elif message.tags == 'warning' %}bg-amber-950/60 text-amber-200 border-amber-800
+                {% else %}bg-blue-950/60 text-blue-200 border-blue-800{% endif %}"
+                x-data="{ show: true }" x-show="show">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="info" class="w-4 h-4 flex-shrink-0"></i>
+                    <span>{{ message }}</span>
+                </div>
+                <button @click="show = false" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Main Body -->
+        <main class="p-4 sm:p-8 flex-grow">
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- Executive Footer -->
+        <footer class="p-6 border-t border-slate-800/80 text-center text-xs text-slate-500">
+            © 2026 Ralyn's International. All rights reserved. Developed by <a href="https://vextechafrica.com/" target="_blank" rel="noopener noreferrer" class="font-semibold text-amber-400 hover:text-brand-orange hover:underline">Vextech Limited</a>.
+        </footer>
+    </div>
+
+    <!-- Configure HTMX CSRF -->
+    <script>
+        document.body.addEventListener('htmx:configRequest', (event) => {
+            const getCookie = (name) => {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            };
+            event.detail.headers['X-CSRFToken'] = getCookie('csrftoken');
+        });
+        
+        lucide.createIcons();
+        document.body.addEventListener('htmx:afterSwap', function() {
+            lucide.createIcons();
+        });
+    </script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

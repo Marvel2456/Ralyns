@@ -1,0 +1,107 @@
+{% extends 'owner/base_owner.html' %}
+
+{% block title %}Edit Product | {{ product.title }}{% endblock %}
+{% block header_title %}Edit Store Product{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-6">
+    <div>
+        <a href="{% url 'owner:products' %}" class="text-xs font-bold text-slate-400 hover:text-white flex items-center gap-1 mb-2">
+            ← Back to Products
+        </a>
+        <h1 class="text-2xl font-extrabold text-white">Edit: {{ product.title }}</h1>
+        <p class="text-xs text-slate-400">Update pricing, description, stock, and WebP product imagery.</p>
+    </div>
+
+    <div class="bg-[#10182C] rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-xl text-white">
+        <form method="POST" enctype="multipart/form-data" class="space-y-5">
+            {% csrf_token %}
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Product Title</label>
+                {{ form.title }}
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Category</label>
+                    {{ form.category }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Stock Count</label>
+                    {{ form.stock_count }}
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Description</label>
+                {{ form.description }}
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Base Price (₦ NGN)</label>
+                    {{ form.base_price }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Discount Price</label>
+                    {{ form.discount_price }}
+                </div>
+            </div>
+
+            <!-- Image Upload & Preview -->
+            <div class="p-4 rounded-2xl bg-black/30 border border-slate-800 space-y-3">
+                {% if product.display_image %}
+                <div class="flex items-center gap-4">
+                    <img src="{{ product.display_image }}" alt="Current Photo" class="w-16 h-16 object-contain rounded-xl bg-black/40 p-1">
+                    <div class="text-xs text-slate-400">Current product photo (optimized WebP)</div>
+                </div>
+                {% endif %}
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-amber-400 mb-1">
+                        Replace Photo (Auto-Converted to WebP & Cloudinary)
+                    </label>
+                    {{ form.image }}
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1">Or Image URL Fallback</label>
+                    {{ form.image_url }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Origin Country / Factory</label>
+                    {{ form.origin_country }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Currency</label>
+                    {{ form.currency }}
+                </div>
+            </div>
+
+            <div class="pt-2 flex items-center gap-6 text-xs font-bold">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    {{ form.is_featured }}
+                    <span>Featured on Homepage</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    {{ form.is_in_stock }}
+                    <span>In Stock</span>
+                </label>
+            </div>
+
+            <div class="pt-5 border-t border-slate-800 flex items-center justify-end gap-3">
+                <a href="{% url 'owner:products' %}" class="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold transition">
+                    Cancel
+                </a>
+                <button type="submit" class="px-6 py-2.5 bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold rounded-xl shadow-md transition">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

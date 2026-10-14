@@ -1,0 +1,68 @@
+{% if cart.items.all %}
+<div class="space-y-4">
+    {% for item in cart.items.all %}
+    <div class="flex items-center justify-between gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-200">
+        <div class="flex-grow">
+            <h4 class="text-xs font-bold text-slate-900 line-clamp-1">{{ item.product.title }}</h4>
+            {% if item.variant %}
+            <div class="text-[10px] text-slate-500">{{ item.variant.name }}</div>
+            {% endif %}
+            <div class="text-xs font-black text-brand-orange mt-0.5">₦{{ item.unit_price|floatformat:2 }}</div>
+        </div>
+
+        <!-- Quantity Adjuster -->
+        <div class="flex items-center gap-1.5 bg-white px-2 py-1 rounded-xl border border-slate-200">
+            <button 
+                hx-post="{% url 'store:update_cart_item' item.id %}" 
+                hx-vals='{"action": "decrease"}'
+                hx-target="#cart-drawer-body"
+                class="w-6 h-6 flex items-center justify-center text-slate-500 hover:text-slate-900 font-bold text-xs">
+                -
+            </button>
+            <span class="text-xs font-bold px-1.5">{{ item.quantity }}</span>
+            <button 
+                hx-post="{% url 'store:update_cart_item' item.id %}" 
+                hx-vals='{"action": "increase"}'
+                hx-target="#cart-drawer-body"
+                class="w-6 h-6 flex items-center justify-center text-slate-500 hover:text-slate-900 font-bold text-xs">
+                +
+            </button>
+        </div>
+
+        <button 
+            hx-post="{% url 'store:update_cart_item' item.id %}" 
+            hx-vals='{"action": "remove"}'
+            hx-target="#cart-drawer-body"
+            class="p-1.5 text-slate-400 hover:text-red-500 transition"
+            title="Remove">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="mt-6 pt-6 border-t border-slate-200 space-y-3">
+    <div class="flex items-center justify-between text-xs text-slate-500">
+        <span>Items Subtotal</span>
+        <span class="font-bold text-slate-900">₦{{ cart.total_amount|floatformat:2 }}</span>
+    </div>
+
+    <div class="flex items-center justify-between text-sm font-bold text-slate-900">
+        <span>Estimated Total</span>
+        <span class="text-lg font-black text-brand-orange">₦{{ cart.total_amount|floatformat:2 }}</span>
+    </div>
+
+    <a href="{% url 'store:checkout' %}" class="block w-full py-3.5 bg-brand-orange hover:bg-brand-hoverOrange text-white text-center font-bold rounded-xl shadow-md transition">
+        Proceed to Checkout →
+    </a>
+</div>
+{% else %}
+<div class="text-center py-16 text-slate-400">
+    <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-3 text-slate-300"></i>
+    <p class="text-sm font-bold text-slate-700">Your cart is currently empty</p>
+    <p class="text-xs text-slate-400 mt-1">Explore our curated store drops and add items.</p>
+    <a href="{% url 'store:catalog' %}" @click="cartDrawerOpen = false" class="mt-4 inline-block px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition">
+        Browse Store
+    </a>
+</div>
+{% endif %}

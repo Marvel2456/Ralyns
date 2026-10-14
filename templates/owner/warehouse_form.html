@@ -1,0 +1,79 @@
+{% extends 'owner/base_owner.html' %}
+
+{% block title %}Edit Warehouse Hub{% endblock %}
+{% block header_title %}Edit Warehouse Hub{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-6">
+    <div>
+        <a href="{% url 'owner:warehouses' %}" class="text-xs font-bold text-slate-400 hover:text-white flex items-center gap-1 mb-2">
+            ← Back to Warehouses
+        </a>
+        <h1 class="text-2xl font-extrabold text-white">Edit: {{ warehouse.name }}</h1>
+        <p class="text-xs text-slate-400">Update address, local contact phone, and marking instructions.</p>
+    </div>
+
+    <div class="bg-[#10182C] rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-xl text-white">
+        <form method="POST" class="space-y-5">
+            {% csrf_token %}
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Warehouse Hub Name</label>
+                {{ form.name }}
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Country</label>
+                    {{ form.country }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">City</label>
+                    {{ form.city }}
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Full Physical Address</label>
+                {{ form.address_line }}
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Contact Person</label>
+                    {{ form.contact_person }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Contact Phone</label>
+                    {{ form.contact_phone }}
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Marking Instructions on Packages</label>
+                {{ form.marking_instructions }}
+            </div>
+
+            <div class="pt-2 flex items-center gap-4 text-xs font-bold">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    {{ form.is_receiving_hub }}
+                    <span>Accepts incoming customer cargo</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    {{ form.is_active }}
+                    <span>Active Hub</span>
+                </label>
+            </div>
+
+            <div class="pt-5 border-t border-slate-800 flex items-center justify-end gap-3">
+                <a href="{% url 'owner:warehouses' %}" class="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold transition">
+                    Cancel
+                </a>
+                <button type="submit" class="px-6 py-2.5 bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold rounded-xl shadow-md transition">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

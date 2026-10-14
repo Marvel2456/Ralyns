@@ -1,0 +1,28 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<h2 style="color: #10182C; font-size: 20px; font-weight: 700; margin-top: 0;">Verify Your Email Address</h2>
+<p style="color: #475569; font-size: 15px; line-height: 1.6;">
+    Hello {{ user.full_name }},
+</p>
+<p style="color: #475569; font-size: 15px; line-height: 1.6;">
+    Welcome to <strong>Ralyn's International</strong>! Your personal shipping identifier has been generated:
+</p>
+
+<div style="background: #F8FAFC; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 12px 18px; margin: 16px 0; text-align: center;">
+    <span style="font-size: 13px; color: #64748B; text-transform: uppercase; font-weight: 600;">Your Cargo Mailbox Code:</span>
+    <span style="font-size: 18px; font-weight: 800; color: #D87808; display: block; margin-top: 4px;">{{ customer_code }}</span>
+</div>
+
+<p style="color: #475569; font-size: 15px; line-height: 1.6;">
+    To activate your account and access your overseas warehouse addresses and store orders, enter the 6-digit verification code below:
+</p>
+
+<div class="otp-box">
+    {{ otp_code }}
+</div>
+
+<p style="color: #64748b; font-size: 13px; line-height: 1.5; text-align: center;">
+    ⏱️ This one-time password expires in <strong>15 minutes</strong>. If you did not create this account, please ignore this email.
+</p>
+{% endblock %}

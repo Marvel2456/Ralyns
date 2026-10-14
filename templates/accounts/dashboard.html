@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Dashboard | Ralyn's International{% endblock %}
+
+{% block content %}
+<div class="py-10 bg-[#F8FAFC]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Welcome Hero Banner -->
+        <div class="bg-gradient-to-r from-brand-navy via-[#1e2942] to-brand-navy rounded-3xl p-6 sm:p-8 text-white shadow-sm mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+                <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">Unified Customer Portal</span>
+                <h1 class="text-2xl sm:text-3xl font-extrabold mt-1">Hello, {{ user.full_name }}</h1>
+                <p class="text-xs sm:text-sm text-slate-300 mt-1">Manage your international cargo imports and online store orders in one place.</p>
+            </div>
+
+            <!-- Customer Mailbox Card -->
+            <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 flex items-center gap-4">
+                <div>
+                    <span class="text-[10px] text-slate-300 font-bold uppercase tracking-wider block">Your Cargo Mailbox Code</span>
+                    <span class="text-xl font-black font-mono text-amber-400">{{ user.customer_code }}</span>
+                </div>
+                <button 
+                    onclick="navigator.clipboard.writeText('{{ user.customer_code }}'); alert('Customer code {{ user.customer_code }} copied to clipboard!');" 
+                    class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition text-xs font-semibold"
+                    title="Copy Code">
+                    <i data-lucide="copy" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Stats Overview -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Cargo</span>
+                    <div class="text-2xl font-black text-brand-navy mt-1">{{ active_shipments_count }}</div>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-amber-50 text-brand-orange flex items-center justify-center">
+                    <i data-lucide="plane" class="w-6 h-6"></i>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Completed Deliveries</span>
+                    <div class="text-2xl font-black text-emerald-600 mt-1">{{ delivered_count }}</div>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                    <i data-lucide="check-circle" class="w-6 h-6"></i>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Store Orders</span>
+                    <div class="text-2xl font-black text-brand-navy mt-1">{{ orders_count }}</div>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Logistics Shipments -->
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm mb-12">
+            <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Your Cargo & Shipments</h2>
+                    <p class="text-xs text-slate-500">Live waybill status and milestone tracking</p>
+                </div>
+                <a href="{% url 'logistics:book_shipment' %}" class="px-5 py-2.5 bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-2">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    <span>Book New Cargo</span>
+                </a>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-700">
+                    <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                        <tr>
+                            <th class="px-6 py-4">Tracking No</th>
+                            <th class="px-6 py-4">Route & Mode</th>
+                            <th class="px-6 py-4">Weight</th>
+                            <th class="px-6 py-4">Status</th>
+                            <th class="px-6 py-4">Est. Cost</th>
+                            <th class="px-6 py-4">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        {% for s in shipments %}
+                        <tr class="hover:bg-slate-50/80 transition">
+                            <td class="px-6 py-4 font-mono font-bold text-slate-900">
+                                {{ s.tracking_number }}
+                            </td>
+                            <td class="px-6 py-4 text-xs font-medium text-slate-800">
+                                <div>{{ s.route.origin_city }} → {{ s.route.destination_city }}</div>
+                                <div class="text-[11px] text-slate-400">{{ s.route.get_freight_type_display }}</div>
+                            </td>
+                            <td class="px-6 py-4 text-xs font-bold text-slate-900">
+                                {{ s.weight_kg }} KG
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-brand-orange">
+                                    {{ s.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 font-bold text-slate-900 text-xs">
+                                {{ s.currency }} ${{ s.total_cost }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{% url 'logistics:tracking' %}?tracking_number={{ s.tracking_number }}" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-1 w-max">
+                                    <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                                    <span>Track</span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="px-6 py-8 text-center text-slate-500 text-xs">
+                                You haven't booked any shipments yet. 
+                                <a href="{% url 'logistics:book_shipment' %}" class="text-brand-orange font-bold hover:underline">Book your first cargo shipment →</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 2: Overseas Warehouse Address Book -->
+        <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-xl font-extrabold text-brand-navy">Your Overseas Receiving Addresses</h2>
+                    <p class="text-xs text-slate-500">Provide these warehouse addresses to your Chinese/European suppliers with your customer code.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for w in warehouses %}
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 uppercase">{{ w.country }}</span>
+                            <span class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Active Hub
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-base font-bold text-slate-900 mb-1">{{ w.name }}</h3>
+                        <p class="text-xs text-slate-500 mb-4">{{ w.city }}, {{ w.country }}</p>
+
+                        <div class="p-3.5 bg-slate-50 rounded-2xl text-xs font-mono text-slate-700 leading-relaxed space-y-1">
+                            <div><strong>Recipient:</strong> {{ user.full_name }} / {{ user.customer_code }}</div>
+                            <div><strong>Address:</strong> {{ w.address_line }}</div>
+                            <div><strong>Phone:</strong> {{ w.contact_phone|default:"+234 800 RALYN'S" }}</div>
+                            <div><strong>Marking:</strong> {{ user.customer_code }}</div>
+                        </div>
+                    </div>
+
+                    <button 
+                        onclick="navigator.clipboard.writeText('Recipient: {{ user.full_name }} / {{ user.customer_code }}\nAddress: {{ w.address_line }}\nMarking: {{ user.customer_code }}'); alert('Warehouse instructions copied!');" 
+                        class="mt-4 w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        <span>Copy Address Details</span>
+                    </button>
+                </div>
+                {% empty %}
+                <div class="col-span-3 text-center py-8 text-xs text-slate-400">
+                    Warehouse hubs loading...
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Section 3: E-Commerce Store Orders -->
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Your Store Purchases</h2>
+                    <p class="text-xs text-slate-500">Products ordered from Ralyn's curated catalog</p>
+                </div>
+                <a href="{% url 'store:catalog' %}" class="text-xs font-bold text-brand-orange hover:underline">
+                    Browse Store Catalog →
+                </a>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-700">
+                    <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                        <tr>
+                            <th class="px-6 py-4">Order #</th>
+                            <th class="px-6 py-4">Date</th>
+                            <th class="px-6 py-4">Items Count</th>
+                            <th class="px-6 py-4">Status</th>
+                            <th class="px-6 py-4">Delivery Method</th>
+                            <th class="px-6 py-4">Total Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        {% for order in orders %}
+                        <tr class="hover:bg-slate-50/80 transition">
+                            <td class="px-6 py-4 font-mono font-bold text-slate-900">
+                                {{ order.order_number }}
+                            </td>
+                            <td class="px-6 py-4 text-xs text-slate-500">
+                                {{ order.created_at|date:"M d, Y" }}
+                            </td>
+                            <td class="px-6 py-4 text-xs font-semibold text-slate-800">
+                                {{ order.items.count }} item(s)
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700">
+                                    {{ order.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-xs text-slate-600">
+                                {{ order.get_delivery_method_display }}
+                            </td>
+                            <td class="px-6 py-4 font-bold text-slate-900 text-xs">
+                                ₦{{ order.total_amount|floatformat:2 }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="px-6 py-8 text-center text-slate-500 text-xs">
+                                No store orders placed yet. 
+                                <a href="{% url 'store:catalog' %}" class="text-brand-orange font-bold hover:underline">Shop curated items →</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

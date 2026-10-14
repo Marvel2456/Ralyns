@@ -1,0 +1,65 @@
+{% extends 'owner/base_owner.html' %}
+
+{% block title %}Advance Checkpoint Milestone{% endblock %}
+{% block header_title %}Update Waybill Status{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto space-y-6">
+    <div>
+        <a href="{% url 'owner:shipments' %}" class="text-xs font-bold text-slate-400 hover:text-white flex items-center gap-1 mb-2">
+            ← Back to All Shipments
+        </a>
+        <h1 class="text-2xl font-extrabold text-white">Advance Checkpoint Milestone</h1>
+        <p class="text-xs text-slate-400">Updates tracking timeline and triggers an automated Resend customer email.</p>
+    </div>
+
+    <!-- Waybill Card -->
+    <div class="bg-[#10182C] border border-slate-800 p-6 rounded-3xl text-white shadow-lg">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+            <span>Waybill Number</span>
+            <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 font-mono font-bold">{{ shipment.customer.customer_code }}</span>
+        </div>
+        <div class="text-2xl font-black font-mono text-white mb-2">{{ shipment.tracking_number }}</div>
+        <div class="text-xs text-slate-300">
+            Customer: <strong>{{ shipment.customer.full_name }}</strong> ({{ shipment.customer.email }})<br>
+            Route: <strong>{{ shipment.route.origin_city }} → {{ shipment.route.destination_city }}</strong> ({{ shipment.weight_kg }} KG)
+        </div>
+    </div>
+
+    <div class="bg-[#10182C] rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-xl text-white">
+        <form method="POST" class="space-y-5">
+            {% csrf_token %}
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">New Milestone Status</label>
+                {{ form.status }}
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Current Checkpoint Location</label>
+                {{ form.location }}
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Remarks / Customer Notice</label>
+                {{ form.remarks }}
+            </div>
+
+            <div class="p-3.5 bg-amber-500/10 rounded-2xl border border-amber-500/20 text-xs text-amber-300 flex items-start gap-2">
+                <i data-lucide="mail" class="w-4 h-4 text-brand-orange flex-shrink-0 mt-0.5"></i>
+                <span>This action will trigger an automated Resend email to <strong>{{ shipment.customer.email }}</strong> via Celery.</span>
+            </div>
+
+            <div class="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+                <a href="{% url 'owner:shipments' %}" class="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold transition">
+                    Cancel
+                </a>
+                <button type="submit" class="px-6 py-2.5 bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                    <span>Update Status & Notify Customer</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

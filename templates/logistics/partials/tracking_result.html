@@ -1,0 +1,71 @@
+{% if error %}
+<div class="p-6 bg-red-50 rounded-3xl border border-red-200 text-center animate-fade-in">
+    <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+    </div>
+    <h3 class="text-base font-bold text-red-900 mb-1">Waybill Not Found</h3>
+    <p class="text-xs text-red-700 max-w-md mx-auto">{{ error }}</p>
+</div>
+{% elif shipment %}
+<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6 animate-fade-in">
+    
+    <!-- Header Summary -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+        <div>
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Waybill Tracking</span>
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-brand-orange uppercase">
+                    {{ shipment.get_status_display }}
+                </span>
+            </div>
+            <div class="text-2xl font-black font-mono text-slate-900 mt-1">{{ shipment.tracking_number }}</div>
+            <div class="text-xs text-slate-500 mt-0.5">Route: <strong>{{ shipment.route.origin_city }} → {{ shipment.route.destination_city }}</strong> ({{ shipment.route.get_freight_type_display }})</div>
+        </div>
+
+        <div class="sm:text-right">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Total Weight</span>
+            <span class="text-xl font-bold text-brand-navy">{{ shipment.weight_kg }} KG</span>
+            <div class="text-xs text-slate-500">{{ shipment.pieces_count }} Package(s)</div>
+        </div>
+    </div>
+
+    <!-- Visual Progress Bar -->
+    <div>
+        <div class="flex items-center justify-between text-xs font-semibold text-slate-500 mb-2">
+            <span>Origin Departure</span>
+            <span class="text-brand-orange font-bold">{{ shipment.progress_percentage }}% Complete</span>
+            <span>Final Delivery</span>
+        </div>
+        <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+            <div class="bg-gradient-to-r from-brand-navy via-brand-orange to-emerald-500 h-full rounded-full transition-all duration-500" style="width: {{ shipment.progress_percentage }}%;"></div>
+        </div>
+    </div>
+
+    <!-- Milestone Timeline -->
+    <div>
+        <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-4">Milestone Checkpoints</h4>
+        <div class="space-y-4 relative before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-slate-200">
+            {% for cp in shipment.checkpoints.all %}
+            <div class="relative flex items-start gap-4">
+                <div class="w-7 h-7 rounded-full {% if forloop.first %}bg-brand-orange text-white ring-4 ring-orange-100{% else %}bg-slate-200 text-slate-600{% endif %} flex items-center justify-center text-xs flex-shrink-0 z-10">
+                    <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 flex-grow">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                        <span class="text-sm font-bold text-slate-900">{{ cp.get_status_display }}</span>
+                        <span class="text-[11px] text-slate-400 font-mono">{{ cp.timestamp|date:"M d, Y - H:i" }}</span>
+                    </div>
+                    <div class="text-xs font-semibold text-brand-steel mt-0.5">📍 {{ cp.location }}</div>
+                    {% if cp.remarks %}
+                    <p class="text-xs text-slate-600 mt-2 bg-white p-2.5 rounded-xl border border-slate-100">{{ cp.remarks }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-xs text-slate-500 pl-8">No checkpoint milestones recorded yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endif %}

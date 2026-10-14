@@ -1,0 +1,169 @@
+{% extends 'owner/base_owner.html' %}
+
+{% block title %}Manage Store Products & Inventory{% endblock %}
+{% block header_title %}E-Commerce Catalog & WebP Optimizer{% endblock %}
+
+{% block content %}
+<div class="space-y-8" x-data="{ addProductModal: false }">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-extrabold text-white">Store Inventory & Catalog</h1>
+            <p class="text-xs text-slate-400">All uploaded product photos are converted to WebP with 75%+ size compression for fast loading.</p>
+        </div>
+
+        <button 
+            @click="addProductModal = true" 
+            class="px-5 py-3 rounded-2xl bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-orange-500/25">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Add New Product</span>
+        </button>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for p in products %}
+        <div class="bg-[#10182C] rounded-3xl border border-slate-800 overflow-hidden shadow-lg flex flex-col justify-between group">
+            <div>
+                <div class="h-44 bg-black/40 relative overflow-hidden flex items-center justify-center p-3">
+                    {% if p.display_image %}
+                    <img src="{{ p.display_image }}" alt="{{ p.title }}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300">
+                    {% else %}
+                    <i data-lucide="package" class="w-12 h-12 text-slate-600"></i>
+                    {% endif %}
+                    <span class="absolute top-3 left-3 px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/20 text-amber-300 uppercase">
+                        {{ p.category.name }}
+                    </span>
+                    <span class="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/20 text-blue-300 font-mono">
+                        WebP
+                    </span>
+                </div>
+
+                <div class="p-5">
+                    <h3 class="font-bold text-white text-sm line-clamp-1 mb-1">{{ p.title }}</h3>
+                    <div class="text-lg font-black text-amber-400 font-mono">₦{{ p.current_price|floatformat:2 }}</div>
+                    <div class="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
+                        <span>Stock: <strong>{{ p.stock_count }} units</strong></span>
+                        <span>{{ p.origin_country }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-5 pt-0">
+                <a href="{% url 'owner:product_edit' p.id %}" class="block w-full py-2 bg-white/5 hover:bg-white/10 text-slate-200 text-center text-xs font-bold rounded-xl border border-white/10 transition">
+                    Edit Product
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-4 text-center py-16 text-slate-500">
+            No products found in catalog. Click "Add New Product" above.
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Add Product Modal Dialog -->
+    <div x-show="addProductModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
+            <div class="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity" @click="addProductModal = false"></div>
+
+            <div class="inline-block bg-[#10182C] rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-xl sm:w-full border border-slate-800 p-6 sm:p-8 relative z-10 text-white">
+                
+                <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-brand-orange flex items-center justify-center font-bold">
+                            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Add Product (Auto-WebP Optimizer)</h3>
+                    </div>
+                    <button @click="addProductModal = false" class="text-slate-400 hover:text-white">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <form method="POST" enctype="multipart/form-data" class="mt-6 space-y-4">
+                    {% csrf_token %}
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Product Title</label>
+                        {{ form.title }}
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Category</label>
+                            {{ form.category }}
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Stock Count</label>
+                            {{ form.stock_count }}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Description</label>
+                        {{ form.description }}
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Base Price (₦ NGN)</label>
+                            {{ form.base_price }}
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Discount Price (Optional)</label>
+                            {{ form.discount_price }}
+                        </div>
+                    </div>
+
+                    <!-- Image Upload with WebP Notice -->
+                    <div class="p-4 rounded-2xl bg-black/30 border border-slate-800 space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-amber-400 mb-1">
+                                🖼️ Upload Photo (Auto-Converted to WebP & Cloudinary)
+                            </label>
+                            {{ form.image }}
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 mb-1">Or Image URL Fallback</label>
+                            {{ form.image_url }}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Origin Country / Factory</label>
+                            {{ form.origin_country }}
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Currency</label>
+                            {{ form.currency }}
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex items-center gap-6 text-xs font-bold">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            {{ form.is_featured }}
+                            <span>Featured on Homepage</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            {{ form.is_in_stock }}
+                            <span>In Stock</span>
+                        </label>
+                    </div>
+
+                    <div class="pt-5 border-t border-slate-800 flex items-center justify-end gap-3">
+                        <button type="button" @click="addProductModal = false" class="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold transition">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-6 py-2.5 bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold rounded-xl shadow-md transition">
+                            Save & Optimize WebP
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

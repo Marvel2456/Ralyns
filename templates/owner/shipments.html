@@ -1,0 +1,105 @@
+{% extends 'owner/base_owner.html' %}
+
+{% block title %}All Waybill Cargo Shipments{% endblock %}
+{% block header_title %}Waybill Cargo Operations{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-extrabold text-white">All Cargo Shipments</h1>
+            <p class="text-xs text-slate-400">Owner oversight of all international consignments and status timeline overrides.</p>
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="bg-[#10182C] rounded-2xl p-4 border border-slate-800 shadow-md">
+        <form method="GET" class="flex flex-col sm:flex-row items-center gap-3">
+            <div class="relative flex-grow w-full">
+                <input 
+                    type="text" 
+                    name="q" 
+                    value="{{ search_q }}" 
+                    placeholder="Search by Waybill #, Customer name, Mailbox code..." 
+                    class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-black/30 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-orange">
+                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+            </div>
+
+            <select name="status" class="w-full sm:w-60 px-4 py-2.5 rounded-xl bg-black/30 border border-slate-700 text-xs text-white focus:outline-none focus:ring-2 focus:ring-brand-orange">
+                <option value="">All Statuses</option>
+                {% for code, label in status_choices %}
+                <option value="{{ code }}" {% if status_filter == code %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold rounded-xl transition">
+                Filter
+            </button>
+        </form>
+    </div>
+
+    <!-- Shipments Table -->
+    <div class="bg-[#10182C] rounded-3xl border border-slate-800 overflow-hidden shadow-lg">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-300">
+                <thead class="bg-black/30 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-800">
+                    <tr>
+                        <th class="px-6 py-4">Tracking Code</th>
+                        <th class="px-6 py-4">Customer Details</th>
+                        <th class="px-6 py-4">Route & Service</th>
+                        <th class="px-6 py-4">Weight / Vol</th>
+                        <th class="px-6 py-4">Total Cost</th>
+                        <th class="px-6 py-4">Current Status</th>
+                        <th class="px-6 py-4">Booked Date</th>
+                        <th class="px-6 py-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60">
+                    {% for s in shipments %}
+                    <tr class="hover:bg-white/5 transition">
+                        <td class="px-6 py-4 font-mono font-bold text-white text-sm">
+                            {{ s.tracking_number }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-white">{{ s.customer.full_name }}</div>
+                            <div class="text-[10px] text-amber-400 font-mono">{{ s.customer.customer_code }}</div>
+                            <div class="text-[10px] text-slate-400">{{ s.customer.email }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="font-semibold text-white">{{ s.route.origin_city }} → {{ s.route.destination_city }}</div>
+                            <div class="text-[10px] text-slate-400">{{ s.route.get_freight_type_display }}</div>
+                        </td>
+                        <td class="px-6 py-4 font-mono">
+                            <div class="font-bold text-white">{{ s.weight_kg }} KG</div>
+                            <div class="text-[10px] text-slate-400">{{ s.pieces_count }} carton(s)</div>
+                        </td>
+                        <td class="px-6 py-4 font-bold text-amber-400 font-mono">
+                            {{ s.currency }} ${{ s.total_cost }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 uppercase">
+                                {{ s.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-slate-400 text-[11px]">
+                            {{ s.created_at|date:"M d, Y" }}
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <a href="{% url 'owner:shipment_update' s.id %}" class="px-3.5 py-1.5 rounded-lg bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold transition">
+                                Advance Status
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="px-6 py-8 text-center text-slate-500">
+                            No shipments found matching criteria.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

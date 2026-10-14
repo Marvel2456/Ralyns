@@ -1,0 +1,47 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<span class="badge badge-orange">Order Received</span>
+<h2 style="color: #10182C; font-size: 20px; font-weight: 700; margin-top: 12px;">Order Receipt #{{ order.order_number }}</h2>
+
+<p style="color: #475569; font-size: 15px; line-height: 1.6;">
+    Thank you for shopping with Ralyn's International, {{ customer.full_name }}! We are preparing your order.
+</p>
+
+<table class="details-table">
+    <tr>
+        <td class="label">Delivery Method</td>
+        <td class="value">{{ order.get_delivery_method_display }}</td>
+    </tr>
+    <tr>
+        <td class="label">Recipient</td>
+        <td class="value">{{ order.recipient_name }} ({{ order.recipient_phone }})</td>
+    </tr>
+    <tr>
+        <td class="label">Delivery Address</td>
+        <td class="value">{{ order.shipping_address }}</td>
+    </tr>
+</table>
+
+<h3 style="font-size: 15px; color: #10182C; margin-top: 24px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">Order Summary</h3>
+<table class="details-table">
+    {% for item in items %}
+    <tr>
+        <td class="label">{{ item.quantity }}x {{ item.product_title }} {% if item.variant_title %}({{ item.variant_title }}){% endif %}</td>
+        <td class="value">₦{{ item.subtotal|floatformat:2 }}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td class="label">Subtotal</td>
+        <td class="value">₦{{ order.subtotal|floatformat:2 }}</td>
+    </tr>
+    <tr>
+        <td class="label">Shipping Fee</td>
+        <td class="value">₦{{ order.shipping_fee|floatformat:2 }}</td>
+    </tr>
+    <tr style="border-top: 2px solid #10182C;">
+        <td class="label" style="font-weight: 700; color: #10182C; font-size: 16px;">Total Amount</td>
+        <td class="value" style="font-weight: 800; color: #D87808; font-size: 18px;">₦{{ order.total_amount|floatformat:2 }}</td>
+    </tr>
+</table>
+{% endblock %}

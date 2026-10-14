@@ -1,0 +1,41 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<span class="badge badge-orange">Booking Confirmed</span>
+<h2 style="color: #10182C; font-size: 20px; font-weight: 700; margin-top: 12px;">Cargo Shipment Booked Successfully</h2>
+
+<p style="color: #475569; font-size: 15px; line-height: 1.6;">
+    Dear {{ customer.full_name }}, your shipment booking has been registered with Ralyn's International.
+</p>
+
+<table class="details-table">
+    <tr>
+        <td class="label">Tracking Number</td>
+        <td class="value" style="color: #D87808; font-family: monospace; font-size: 16px;">{{ shipment.tracking_number }}</td>
+    </tr>
+    <tr>
+        <td class="label">Route</td>
+        <td class="value">{{ shipment.route.origin_city }} → {{ shipment.route.destination_city }}</td>
+    </tr>
+    <tr>
+        <td class="label">Freight Service</td>
+        <td class="value">{{ shipment.route.get_freight_type_display }}</td>
+    </tr>
+    <tr>
+        <td class="label">Weight & Pieces</td>
+        <td class="value">{{ shipment.weight_kg }} KG ({{ shipment.pieces_count }} items)</td>
+    </tr>
+    <tr>
+        <td class="label">Estimated Total</td>
+        <td class="value">{{ shipment.currency }} ${{ shipment.total_cost }}</td>
+    </tr>
+    <tr>
+        <td class="label">Transit Time</td>
+        <td class="value">{{ shipment.route.min_transit_days }} - {{ shipment.route.max_transit_days }} Business Days</td>
+    </tr>
+</table>
+
+<p style="color: #475569; font-size: 14px; line-height: 1.6;">
+    <strong>Next Step:</strong> Ensure your parcels sent to our origin warehouse are clearly marked with your customer code <strong>{{ customer.customer_code }}</strong> and this tracking number.
+</p>
+{% endblock %}

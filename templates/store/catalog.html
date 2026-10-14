@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Curated Store Catalog | Ralyn's International{% endblock %}
+
+{% block content %}
+<div class="py-12 bg-[#F8FAFC]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+                <span class="text-xs font-bold tracking-widest text-brand-orange uppercase">Curated Storefront</span>
+                <h1 class="text-3xl font-extrabold text-brand-navy mt-1">Imported Goods & Electronics</h1>
+                <p class="text-slate-600 text-sm mt-1">Directly procured and inspected items ready for doorstep delivery across Nigeria.</p>
+            </div>
+
+            <!-- Search Bar with HTMX -->
+            <div class="w-full md:w-80">
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        name="q" 
+                        value="{{ search_query }}"
+                        placeholder="Search products..." 
+                        hx-get="{% url 'store:catalog' %}" 
+                        hx-target="#product-grid-container" 
+                        hx-trigger="keyup changed delay:300ms"
+                        class="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-orange text-sm font-medium text-slate-900 bg-white shadow-sm">
+                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Pills (HTMX Filter) -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
+            <a 
+                href="{% url 'store:catalog' %}" 
+                hx-get="{% url 'store:catalog' %}" 
+                hx-target="#product-grid-container" 
+                hx-push-url="true"
+                class="px-5 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition {% if not selected_category %}bg-brand-navy text-white shadow-sm{% else %}bg-white text-slate-700 hover:bg-slate-100 border border-slate-200{% endif %}">
+                All Categories
+            </a>
+            {% for cat in categories %}
+            <a 
+                href="{% url 'store:catalog' %}?category={{ cat.slug }}" 
+                hx-get="{% url 'store:catalog' %}?category={{ cat.slug }}" 
+                hx-target="#product-grid-container" 
+                hx-push-url="true"
+                class="px-5 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition {% if selected_category and selected_category.slug == cat.slug %}bg-brand-navy text-white shadow-sm{% else %}bg-white text-slate-700 hover:bg-slate-100 border border-slate-200{% endif %}">
+                {{ cat.name }}
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Products Grid Container -->
+        <div id="product-grid-container">
+            {% include 'store/partials/product_grid.html' %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

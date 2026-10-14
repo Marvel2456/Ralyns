@@ -1,0 +1,39 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<span class="badge badge-orange">{{ checkpoint.get_status_display }}</span>
+<h2 style="color: #10182C; font-size: 20px; font-weight: 700; margin-top: 12px;">Shipment Status Milestone Update</h2>
+
+<p style="color: #475569; font-size: 15px; line-height: 1.6;">
+    Dear {{ customer.full_name }}, there is a new status update for your shipment <strong>#{{ shipment.tracking_number }}</strong>.
+</p>
+
+<table class="details-table">
+    <tr>
+        <td class="label">Current Status</td>
+        <td class="value" style="color: #D87808;">{{ checkpoint.get_status_display }}</td>
+    </tr>
+    <tr>
+        <td class="label">Location Recorded</td>
+        <td class="value">{{ checkpoint.location }}</td>
+    </tr>
+    <tr>
+        <td class="label">Timestamp</td>
+        <td class="value">{{ checkpoint.timestamp|date:"M d, Y - H:i" }}</td>
+    </tr>
+    {% if checkpoint.remarks %}
+    <tr>
+        <td class="label">Remarks / Notes</td>
+        <td class="value">{{ checkpoint.remarks }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td class="label">Destination</td>
+        <td class="value">{{ shipment.route.destination_city }}, {{ shipment.route.destination_country }}</td>
+    </tr>
+</table>
+
+<p style="color: #475569; font-size: 14px; line-height: 1.6;">
+    You can track your cargo live at any moment from your customer dashboard or on our tracking portal.
+</p>
+{% endblock %}

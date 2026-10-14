@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ brand_name }}</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1e293b; }
+        .container { max-width: 600px; margin: 30px auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .header { background-color: #10182C; padding: 32px 24px; text-align: center; }
+        .logo-text { font-size: 24px; font-weight: 800; letter-spacing: 2px; color: #ffffff; margin: 0; }
+        .logo-sub { font-size: 11px; font-weight: 600; letter-spacing: 4px; color: #64748C; margin-top: 4px; text-transform: uppercase; }
+        .content { padding: 36px 32px; }
+        .footer { background-color: #f1f5f9; padding: 24px 32px; text-align: center; font-size: 12px; color: #64748b; line-height: 1.6; border-top: 1px solid #e2e8f0; }
+        .badge { display: inline-block; padding: 6px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .badge-orange { background-color: #FEF3C7; color: #D87808; }
+        .button { display: inline-block; background-color: #D87808; color: #ffffff !important; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-weight: 700; font-size: 15px; margin: 20px 0; }
+        .otp-box { background-color: #0f172a; color: #ffffff; font-size: 32px; font-weight: 800; letter-spacing: 10px; padding: 20px; border-radius: 12px; text-align: center; margin: 24px 0; border: 2px solid #D87808; font-family: monospace; }
+        .details-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .details-table td { padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        .details-table td.label { color: #64748b; font-weight: 500; }
+        .details-table td.value { text-align: right; color: #0f172a; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo-text">RALYN'S</h1>
+            <div class="logo-sub">INTERNATIONAL</div>
+        </div>
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+        <div class="footer">
+            <p><strong>Ralyn's International</strong> • Cross-Border Importation, Logistics & Curated Store</p>
+            <p>China • United Kingdom • Germany • United States • Nigeria</p>
+            <p>Questions? Reach our team at <a href="mailto:{{ support_email }}" style="color: #D87808;">{{ support_email }}</a></p>
+            <p style="margin-top: 12px; font-size: 11px; color: #94a3b8;">© 2026 Ralyn's International. All rights reserved. Developed by <a href="https://vextechafrica.com/" style="color: #D87808; text-decoration: none; font-weight: 600;">Vextech Limited</a>.</p>
+        </div>
+    </div>
+</body>
+</html>
