@@ -11,12 +11,12 @@
         </div>
 
         <!-- Quantity Adjuster -->
-        <div class="flex items-center gap-1.5 bg-white px-2 py-1 rounded-xl border border-slate-200">
+        <div class="flex items-center gap-1 bg-white px-1.5 py-1 rounded-xl border border-slate-200">
             <button 
                 hx-post="{% url 'store:update_cart_item' item.id %}" 
                 hx-vals='{"action": "decrease"}'
                 hx-target="#cart-drawer-body"
-                class="w-6 h-6 flex items-center justify-center text-slate-500 hover:text-slate-900 font-bold text-xs">
+                class="w-7 h-7 flex items-center justify-center text-slate-600 hover:text-slate-900 active:bg-slate-100 rounded-lg font-bold text-sm touch-manipulation">
                 -
             </button>
             <span class="text-xs font-bold px-1.5">{{ item.quantity }}</span>
@@ -24,7 +24,7 @@
                 hx-post="{% url 'store:update_cart_item' item.id %}" 
                 hx-vals='{"action": "increase"}'
                 hx-target="#cart-drawer-body"
-                class="w-6 h-6 flex items-center justify-center text-slate-500 hover:text-slate-900 font-bold text-xs">
+                class="w-7 h-7 flex items-center justify-center text-slate-600 hover:text-slate-900 active:bg-slate-100 rounded-lg font-bold text-sm touch-manipulation">
                 +
             </button>
         </div>
@@ -33,7 +33,7 @@
             hx-post="{% url 'store:update_cart_item' item.id %}" 
             hx-vals='{"action": "remove"}'
             hx-target="#cart-drawer-body"
-            class="p-1.5 text-slate-400 hover:text-red-500 transition"
+            class="p-2 text-slate-400 hover:text-red-500 active:bg-red-50 rounded-lg transition touch-manipulation"
             title="Remove">
             <i data-lucide="trash-2" class="w-4 h-4"></i>
         </button>
@@ -52,8 +52,9 @@
         <span class="text-lg font-black text-brand-orange">₦{{ cart.total_amount|floatformat:2 }}</span>
     </div>
 
-    <a href="{% url 'store:checkout' %}" class="block w-full py-3.5 bg-brand-orange hover:bg-brand-hoverOrange text-white text-center font-bold rounded-xl shadow-md transition">
-        Proceed to Checkout →
+    <a href="{% url 'store:checkout' %}" class="w-full min-h-[48px] py-3.5 bg-brand-orange hover:bg-brand-hoverOrange text-white text-center font-bold rounded-xl shadow-md transition flex items-center justify-center gap-1.5">
+        <span>Proceed to Checkout</span>
+        <span>→</span>
     </a>
 </div>
 {% else %}

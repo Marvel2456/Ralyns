@@ -53,56 +53,57 @@
 <body class="flex flex-col min-h-screen text-slate-800 antialiased" x-data="{ mobileMenuOpen: false, cartDrawerOpen: false }">
     
     <!-- Top Bar -->
-    <div class="bg-brand-navy text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
-            <div class="flex items-center gap-3">
+    <div class="bg-brand-navy text-slate-300 text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-1.5 sm:gap-2 text-center sm:text-left">
+            <div class="flex items-center gap-2 sm:gap-3 flex-wrap justify-center">
                 <span class="inline-flex items-center gap-1.5 text-amber-400 font-semibold">
                     <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                     Direct Freight Lines Active:
                 </span>
                 <span class="hidden md:inline">China ⇄ Nigeria • UK/Europe ⇄ Nigeria • Nigeria → USA & Global</span>
+                <span class="md:hidden text-[10px] text-slate-400">China • Europe • USA • Nigeria</span>
             </div>
-            <div class="flex items-center gap-4">
-                <span>📞 {{ SUPPORT_PHONE }}</span>
+            <div class="flex items-center gap-3 sm:gap-4 text-[10px] sm:text-xs text-slate-300">
+                <a href="tel:{{ SUPPORT_PHONE }}" class="hover:text-amber-400 transition flex items-center gap-1">📞 {{ SUPPORT_PHONE }}</a>
                 <span class="text-slate-600">|</span>
-                <span>✉️ {{ SUPPORT_EMAIL }}</span>
+                <a href="mailto:{{ SUPPORT_EMAIL }}" class="hover:text-amber-400 transition flex items-center gap-1">✉️ <span class="hidden xs:inline">{{ SUPPORT_EMAIL }}</span><span class="xs:hidden">Email</span></a>
             </div>
         </div>
     </div>
 
     <!-- Main Navigation Bar -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
                 
                 <!-- Brand Logo -->
-                <a href="{% url 'core:home' %}" class="flex items-center gap-3 group">
-                    <div class="relative w-11 h-11 flex items-center justify-center">
+                <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 sm:gap-3 group flex-shrink-0">
+                    <div class="relative w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center">
                         <img src="/static/img/logo.png" alt="Ralyn's International" class="w-full h-full object-contain group-hover:scale-105 transition-transform">
                     </div>
                     <div>
-                        <div class="text-xl font-extrabold tracking-wider text-brand-navy leading-none">RALYN'S</div>
-                        <div class="text-[9px] tracking-[0.28em] font-semibold text-brand-slate uppercase mt-1">INTERNATIONAL</div>
+                        <div class="text-lg sm:text-xl font-extrabold tracking-wider text-brand-navy leading-none">RALYN'S</div>
+                        <div class="text-[8px] sm:text-[9px] tracking-[0.25em] sm:tracking-[0.28em] font-semibold text-brand-slate uppercase mt-0.5 sm:mt-1">INTERNATIONAL</div>
                     </div>
                 </a>
 
-                <!-- Desktop Navigation Links -->
-                <nav class="hidden lg:flex items-center gap-8 font-medium text-sm text-slate-700">
-                    <a href="{% url 'core:home' %}" class="hover:text-brand-orange transition">Home</a>
-                    <a href="{% url 'logistics:calculator' %}" class="hover:text-brand-orange transition flex items-center gap-1.5">
+                <!-- Desktop Navigation Links (>= lg) -->
+                <nav class="hidden lg:flex items-center gap-6 xl:gap-8 font-medium text-sm text-slate-700">
+                    <a href="{% url 'core:home' %}" class="hover:text-brand-orange transition py-1">Home</a>
+                    <a href="{% url 'logistics:calculator' %}" class="hover:text-brand-orange transition flex items-center gap-1.5 py-1">
                         <i data-lucide="calculator" class="w-4 h-4 text-brand-orange"></i> Shipping Calculator
                     </a>
-                    <a href="{% url 'logistics:tracking' %}" class="hover:text-brand-orange transition flex items-center gap-1.5">
+                    <a href="{% url 'logistics:tracking' %}" class="hover:text-brand-orange transition flex items-center gap-1.5 py-1">
                         <i data-lucide="package-search" class="w-4 h-4 text-brand-steel"></i> Cargo Tracking
                     </a>
-                    <a href="{% url 'logistics:routes_directory' %}" class="hover:text-brand-orange transition">Routes & Hubs</a>
-                    <a href="{% url 'store:catalog' %}" class="hover:text-brand-orange transition font-semibold text-brand-navy flex items-center gap-1.5">
+                    <a href="{% url 'logistics:routes_directory' %}" class="hover:text-brand-orange transition py-1">Routes & Hubs</a>
+                    <a href="{% url 'store:catalog' %}" class="hover:text-brand-orange transition font-semibold text-brand-navy flex items-center gap-1.5 py-1">
                         <i data-lucide="shopping-bag" class="w-4 h-4 text-brand-orange"></i> Store Catalog
                     </a>
                 </nav>
 
-                <!-- Action Controls (User, Cart, Moderator) -->
-                <div class="flex items-center gap-3 sm:gap-4">
+                <!-- Action Controls (User, Cart, Mobile Toggle) -->
+                <div class="flex items-center gap-1.5 sm:gap-3">
                     
                     <!-- Cart Trigger Button -->
                     <button 
@@ -110,25 +111,26 @@
                         hx-get="{% url 'store:cart_drawer' %}" 
                         hx-target="#cart-drawer-body" 
                         hx-swap="innerHTML"
-                        class="relative p-2.5 rounded-xl hover:bg-slate-100 text-slate-700 transition"
-                        title="View Cart">
+                        class="relative p-2 sm:p-2.5 rounded-xl hover:bg-slate-100 text-slate-700 transition"
+                        title="View Cart"
+                        aria-label="Shopping Cart">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                     </button>
 
-                    <!-- Authentication / Account -->
+                    <!-- Authentication / Account (Desktop & Tablet) -->
                     {% if user.is_authenticated %}
                         <div class="relative" x-data="{ open: false }">
-                            <button @click="open = !open" class="flex items-center gap-2 p-1.5 sm:px-3 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-brand-navy transition">
-                                <div class="w-8 h-8 rounded-lg bg-brand-navy text-white flex items-center justify-center font-bold text-xs">
+                            <button @click="open = !open" class="flex items-center gap-1.5 sm:gap-2 p-1 sm:px-3 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-brand-navy transition">
+                                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-brand-navy text-white flex items-center justify-center font-bold text-xs flex-shrink-0">
                                     {{ user.full_name|slice:":2"|upper }}
                                 </div>
                                 <span class="hidden sm:inline text-xs font-semibold">{{ user.customer_code }}</span>
-                                <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500"></i>
+                                <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 hidden sm:inline"></i>
                             </button>
 
-                            <div x-show="open" @click.outside="open = false" x-cloak class="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 text-xs">
+                            <div x-show="open" @click.outside="open = false" x-cloak class="absolute right-0 mt-2 w-60 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 text-xs">
                                 <div class="px-4 py-2 border-b border-slate-100">
-                                    <div class="font-bold text-slate-900">{{ user.full_name }}</div>
+                                    <div class="font-bold text-slate-900 truncate">{{ user.full_name }}</div>
                                     <div class="text-slate-500 truncate">{{ user.email }}</div>
                                     <div class="mt-1 inline-block px-2 py-0.5 rounded bg-amber-50 text-brand-orange font-mono font-semibold">{{ user.customer_code }}</div>
                                 </div>
@@ -161,49 +163,149 @@
                             </div>
                         </div>
                     {% else %}
-                        <div class="flex items-center gap-2">
+                        <div class="hidden sm:flex items-center gap-2">
                             <a href="{% url 'accounts:login' %}" class="text-xs sm:text-sm font-semibold text-brand-steel hover:text-brand-orange px-3 py-2 transition">
                                 Sign In
                             </a>
-                            <a href="{% url 'accounts:register' %}" class="text-xs sm:text-sm font-bold bg-brand-orange hover:bg-brand-hoverOrange text-white px-4 py-2.5 rounded-xl shadow-sm transition">
+                            <a href="{% url 'accounts:register' %}" class="text-xs sm:text-sm font-bold bg-brand-orange hover:bg-brand-hoverOrange text-white px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl shadow-sm transition">
                                 Get Started
                             </a>
                         </div>
                     {% endif %}
 
-                    <!-- Mobile Menu Button -->
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-2 rounded-xl hover:bg-slate-100 text-slate-700">
-                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    <!-- Mobile Menu Hamburger Button -->
+                    <button 
+                        @click="mobileMenuOpen = !mobileMenuOpen" 
+                        class="lg:hidden p-2 rounded-xl hover:bg-slate-100 text-slate-700 transition"
+                        aria-label="Toggle navigation menu">
+                        <i x-show="!mobileMenuOpen" data-lucide="menu" class="w-6 h-6"></i>
+                        <i x-show="mobileMenuOpen" x-cloak data-lucide="x" class="w-6 h-6 text-brand-orange"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Drawer Menu -->
-        <div x-show="mobileMenuOpen" x-cloak class="lg:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 space-y-3">
-            <a href="{% url 'core:home' %}" class="block py-2 font-medium text-slate-800">Home</a>
-            <a href="{% url 'logistics:calculator' %}" class="block py-2 font-medium text-slate-800">Shipping Calculator</a>
-            <a href="{% url 'logistics:tracking' %}" class="block py-2 font-medium text-slate-800">Cargo Tracking</a>
-            <a href="{% url 'logistics:routes_directory' %}" class="block py-2 font-medium text-slate-800">Routes & Hubs</a>
-            <a href="{% url 'store:catalog' %}" class="block py-2 font-medium text-brand-orange font-bold">Store Catalog</a>
+        <!-- Full Mobile Drawer Menu (Interactive slide-down for phones & tablets) -->
+        <div 
+            x-show="mobileMenuOpen" 
+            x-cloak 
+            @click.outside="mobileMenuOpen = false" 
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 -translate-y-2"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-150"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-2"
+            class="lg:hidden border-t border-slate-200 bg-white max-h-[calc(100vh-5rem)] overflow-y-auto px-4 pt-4 pb-8 space-y-4 shadow-xl">
+            
+            {% if user.is_authenticated %}
+                <!-- Logged in Customer Card in Mobile Menu -->
+                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-brand-navy text-white flex items-center justify-center font-bold text-sm">
+                            {{ user.full_name|slice:":2"|upper }}
+                        </div>
+                        <div>
+                            <div class="font-bold text-slate-900 text-sm truncate max-w-[170px]">{{ user.full_name }}</div>
+                            <div class="text-[11px] font-mono text-brand-orange font-semibold">{{ user.customer_code }}</div>
+                        </div>
+                    </div>
+                    <a href="{% url 'accounts:dashboard' %}" @click="mobileMenuOpen = false" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-100 transition">
+                        Portal
+                    </a>
+                </div>
+            {% endif %}
+
+            <!-- Main Navigation Links -->
+            <div class="space-y-1 text-sm font-semibold text-slate-800">
+                <a href="{% url 'core:home' %}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition">
+                    <i data-lucide="home" class="w-4 h-4 text-brand-orange"></i>
+                    <span>Home</span>
+                </a>
+                <a href="{% url 'logistics:calculator' %}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition">
+                    <i data-lucide="calculator" class="w-4 h-4 text-brand-orange"></i>
+                    <span>Shipping Calculator</span>
+                </a>
+                <a href="{% url 'logistics:tracking' %}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition">
+                    <i data-lucide="package-search" class="w-4 h-4 text-brand-steel"></i>
+                    <span>Cargo Tracking</span>
+                </a>
+                <a href="{% url 'logistics:routes_directory' %}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition">
+                    <i data-lucide="git-fork" class="w-4 h-4 text-brand-slate"></i>
+                    <span>Routes & Hubs</span>
+                </a>
+                <a href="{% url 'store:catalog' %}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-orange-50/70 text-brand-orange font-bold transition">
+                    <i data-lucide="shopping-bag" class="w-4 h-4 text-brand-orange"></i>
+                    <span>Store Catalog</span>
+                </a>
+            </div>
+
+            <!-- Role & Account Actions for Authenticated Users -->
+            {% if user.is_authenticated %}
+                <div class="pt-3 border-t border-slate-100 space-y-1 text-sm font-semibold text-slate-700">
+                    <a href="{% url 'accounts:dashboard' %}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4 text-brand-orange"></i>
+                        <span>Customer Dashboard</span>
+                    </a>
+                    <a href="{% url 'logistics:book_shipment' %}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition text-emerald-700">
+                        <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-600"></i>
+                        <span>Book Cargo Shipment</span>
+                    </a>
+
+                    {% if user.is_admin_user %}
+                    <a href="{% url 'owner:dashboard' %}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-amber-50 text-brand-orange font-bold transition">
+                        <i data-lucide="crown" class="w-4 h-4"></i>
+                        <span>Owner's Command Center</span>
+                    </a>
+                    {% endif %}
+
+                    {% if user.is_moderator %}
+                    <a href="{% url 'moderation:dashboard' %}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 text-slate-700 transition">
+                        <i data-lucide="shield" class="w-4 h-4 text-brand-steel"></i>
+                        <span>Staff Operations</span>
+                    </a>
+                    {% endif %}
+
+                    <a href="{% url 'accounts:logout' %}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 transition font-medium">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                        <span>Sign Out</span>
+                    </a>
+                </div>
+            {% else %}
+                <!-- Login/Register CTAs on Mobile -->
+                <div class="pt-3 border-t border-slate-100 space-y-2">
+                    <a href="{% url 'accounts:register' %}" @click="mobileMenuOpen = false" class="block w-full py-3 bg-brand-orange hover:bg-brand-hoverOrange text-white text-center font-bold text-sm rounded-xl shadow-md transition">
+                        Get Started (Free Account)
+                    </a>
+                    <a href="{% url 'accounts:login' %}" @click="mobileMenuOpen = false" class="block w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold text-sm rounded-xl transition">
+                        Sign In to Existing Account
+                    </a>
+                </div>
+            {% endif %}
+
+            <!-- Support Hotline Info in Mobile Drawer -->
+            <div class="pt-4 border-t border-slate-100 text-xs text-slate-500 space-y-1">
+                <div>Support Phone: <a href="tel:{{ SUPPORT_PHONE }}" class="font-bold text-slate-800">{{ SUPPORT_PHONE }}</a></div>
+                <div>Direct Email: <a href="mailto:{{ SUPPORT_EMAIL }}" class="font-bold text-slate-800">{{ SUPPORT_EMAIL }}</a></div>
+            </div>
         </div>
     </header>
 
     <!-- Notification Messages -->
     {% if messages %}
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 w-full">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-3 sm:mt-4 w-full">
         {% for message in messages %}
-        <div class="p-4 mb-3 rounded-2xl flex items-center justify-between text-sm shadow-sm border 
+        <div class="p-3.5 sm:p-4 mb-3 rounded-2xl flex items-center justify-between text-xs sm:text-sm shadow-sm border 
             {% if message.tags == 'error' %}bg-red-50 text-red-800 border-red-200
             {% elif message.tags == 'success' %}bg-emerald-50 text-emerald-800 border-emerald-200
             {% elif message.tags == 'warning' %}bg-amber-50 text-amber-800 border-amber-200
             {% else %}bg-blue-50 text-blue-800 border-blue-200{% endif %}"
             x-data="{ show: true }" x-show="show">
-            <div class="flex items-center gap-3">
-                <i data-lucide="info" class="w-5 h-5 flex-shrink-0"></i>
-                <span>{{ message }}</span>
+            <div class="flex items-center gap-2.5 sm:gap-3">
+                <i data-lucide="info" class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"></i>
+                <span class="leading-snug">{{ message }}</span>
             </div>
-            <button @click="show = false" class="text-slate-400 hover:text-slate-600">
+            <button @click="show = false" class="text-slate-400 hover:text-slate-600 p-1 flex-shrink-0">
                 <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
@@ -216,23 +318,23 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Slide-Over Cart Drawer -->
+    <!-- Slide-Over Cart Drawer (Fully responsive with pl-0 on mobile) -->
     <div x-show="cartDrawerOpen" x-cloak class="fixed inset-0 z-50 overflow-hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
-        <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" @click="cartDrawerOpen = false"></div>
-        <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
-            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col" @click.outside="cartDrawerOpen = false">
-                <div class="p-6 bg-brand-navy text-white flex items-center justify-between">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" @click="cartDrawerOpen = false"></div>
+        <div class="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
+            <div class="w-screen max-w-full sm:max-w-md bg-white shadow-2xl flex flex-col" @click.outside="cartDrawerOpen = false">
+                <div class="p-5 sm:p-6 bg-brand-navy text-white flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <i data-lucide="shopping-cart" class="w-5 h-5 text-brand-orange"></i>
-                        <h2 class="text-lg font-bold">Your Shopping Cart</h2>
+                        <h2 class="text-base sm:text-lg font-bold">Your Shopping Cart</h2>
                     </div>
-                    <button @click="cartDrawerOpen = false" class="text-slate-400 hover:text-white">
+                    <button @click="cartDrawerOpen = false" class="p-1 rounded-lg text-slate-400 hover:text-white transition">
                         <i data-lucide="x" class="w-6 h-6"></i>
                     </button>
                 </div>
-                <div id="cart-drawer-body" class="p-6 flex-grow overflow-y-auto">
+                <div id="cart-drawer-body" class="p-4 sm:p-6 flex-grow overflow-y-auto">
                     <div class="text-center py-12 text-slate-400">
-                        <i data-lucide="loader-2" class="w-8 h-8 mx-auto animate-spin mb-2"></i>
+                        <i data-lucide="loader-2" class="w-8 h-8 mx-auto animate-spin mb-2 text-brand-orange"></i>
                         <p class="text-sm">Loading your cart items...</p>
                     </div>
                 </div>
@@ -241,9 +343,9 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-brand-navy text-white pt-16 pb-12 border-t border-slate-800">
+    <footer class="bg-brand-navy text-white pt-12 sm:pt-16 pb-8 sm:pb-12 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10">
                 
                 <div class="lg:col-span-2 space-y-4">
                     <div class="flex items-center gap-3">

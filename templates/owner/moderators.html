@@ -24,26 +24,26 @@
     <!-- Moderators Table -->
     <div class="bg-[#10182C] rounded-3xl border border-slate-800 overflow-hidden shadow-lg">
         <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs text-slate-300">
+            <table class="w-full text-left text-xs text-slate-300 min-w-[700px]">
                 <thead class="bg-black/30 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-800">
                     <tr>
-                        <th class="px-6 py-4">Staff Member</th>
-                        <th class="px-6 py-4">Department</th>
-                        <th class="px-6 py-4">Granted Permissions</th>
-                        <th class="px-6 py-4">Contact</th>
-                        <th class="px-6 py-4">Account Status</th>
-                        <th class="px-6 py-4">Created Date</th>
-                        <th class="px-6 py-4 text-right">Actions</th>
+                        <th class="px-5 sm:px-6 py-4">Staff Member</th>
+                        <th class="px-5 sm:px-6 py-4">Department</th>
+                        <th class="px-5 sm:px-6 py-4">Granted Permissions</th>
+                        <th class="px-5 sm:px-6 py-4">Contact</th>
+                        <th class="px-5 sm:px-6 py-4">Account Status</th>
+                        <th class="px-5 sm:px-6 py-4">Created Date</th>
+                        <th class="px-5 sm:px-6 py-4 text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-800/60">
                     {% for m in moderators %}
                     <tr class="hover:bg-white/5 transition">
-                        <td class="px-6 py-4">
+                        <td class="px-5 sm:px-6 py-4">
                             <div class="font-bold text-white text-sm">{{ m.full_name }}</div>
                             <div class="text-[11px] text-slate-400 font-mono">{{ m.email }}</div>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-5 sm:px-6 py-4">
                             {% if m.moderator_profile %}
                             <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 uppercase">
                                 {{ m.moderator_profile.get_department_display }}
@@ -52,7 +52,7 @@
                             <span class="text-slate-400">General Staff</span>
                             {% endif %}
                         </td>
-                        <td class="px-6 py-4 text-[11px] text-slate-400 space-y-0.5">
+                        <td class="px-5 sm:px-6 py-4 text-[11px] text-slate-400 space-y-0.5">
                             {% if m.moderator_profile %}
                                 {% if m.moderator_profile.can_manage_routes %}<div class="text-emerald-400 font-medium">✓ Route Management</div>{% endif %}
                                 {% if m.moderator_profile.can_update_shipments %}<div class="text-emerald-400 font-medium">✓ Cargo Tracking Updates</div>{% endif %}
@@ -62,10 +62,10 @@
                             <div>Full Rights</div>
                             {% endif %}
                         </td>
-                        <td class="px-6 py-4 font-mono text-slate-400">
+                        <td class="px-5 sm:px-6 py-4 font-mono text-slate-400">
                             {{ m.phone|default:"—" }}
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-5 sm:px-6 py-4">
                             {% if m.is_active %}
                             <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 uppercase">
                                 Active
@@ -76,10 +76,10 @@
                             </span>
                             {% endif %}
                         </td>
-                        <td class="px-6 py-4 text-slate-400">
+                        <td class="px-5 sm:px-6 py-4 text-slate-400">
                             {{ m.created_at|date:"M d, Y" }}
                         </td>
-                        <td class="px-6 py-4 text-right">
+                        <td class="px-5 sm:px-6 py-4 text-right">
                             <form action="{% url 'owner:toggle_moderator' m.id %}" method="POST" class="inline">
                                 {% csrf_token %}
                                 {% if m.is_active %}
@@ -108,19 +108,19 @@
 
     <!-- Create Moderator Modal Dialog -->
     <div x-show="createModalOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
+        <div class="flex items-center justify-center min-h-screen p-3 sm:p-4 text-center">
             <div class="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity" @click="createModalOpen = false"></div>
 
-            <div class="inline-block bg-[#10182C] rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-xl sm:w-full border border-slate-800 p-6 sm:p-8 relative z-10 text-white">
+            <div class="inline-block bg-[#10182C] rounded-3xl text-left overflow-y-auto max-h-[92vh] shadow-2xl transform transition-all my-auto max-w-xl w-full border border-slate-800 p-5 sm:p-8 relative z-10 text-white">
                 
                 <div class="flex items-center justify-between pb-4 border-b border-slate-800">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-brand-orange flex items-center justify-center font-bold">
+                        <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-brand-orange flex items-center justify-center font-bold flex-shrink-0">
                             <i data-lucide="shield-check" class="w-5 h-5"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-white">Provision Operations Moderator</h3>
+                        <h3 class="text-base sm:text-lg font-bold text-white">Provision Operations Moderator</h3>
                     </div>
-                    <button @click="createModalOpen = false" class="text-slate-400 hover:text-white">
+                    <button @click="createModalOpen = false" class="p-1 rounded-lg text-slate-400 hover:text-white transition">
                         <i data-lucide="x" class="w-5 h-5"></i>
                     </button>
                 </div>

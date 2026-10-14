@@ -3,7 +3,7 @@
 {% block title %}Create Moderator Account | Admin Console{% endblock %}
 
 {% block content %}
-<div class="py-10 bg-slate-100 min-h-screen">
+<div class="py-6 sm:py-10 bg-slate-100 min-h-screen">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="mb-6">
@@ -14,7 +14,7 @@
             <p class="text-xs text-slate-500">Create staff credentials with role-based permissions for logistics and store management.</p>
         </div>
 
-        <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200">
+        <div class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-sm border border-slate-200">
             <form method="POST" class="space-y-5">
                 {% csrf_token %}
 
@@ -52,30 +52,30 @@
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Permissions & Access Rights</label>
                     
                     <div class="space-y-2.5 text-xs text-slate-700 font-medium">
-                        <label class="flex items-center gap-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
                             {{ form.can_manage_routes }}
                             <span>Can create, edit, and toggle dynamic shipping routes and rates</span>
                         </label>
-                        <label class="flex items-center gap-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
                             {{ form.can_update_shipments }}
                             <span>Can advance cargo tracking milestones and send Resend notifications</span>
                         </label>
-                        <label class="flex items-center gap-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
                             {{ form.can_manage_products }}
                             <span>Can manage e-commerce catalog, categories, and inventory</span>
                         </label>
-                        <label class="flex items-center gap-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
                             {{ form.can_manage_orders }}
                             <span>Can view and fulfill store customer orders</span>
                         </label>
                     </div>
                 </div>
 
-                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
-                    <a href="{% url 'moderation:moderator_list' %}" class="px-5 py-3 rounded-xl bg-slate-100 text-slate-600 text-xs font-bold hover:bg-slate-200 transition">
+                <div class="pt-4 border-t border-slate-100 flex flex-col-reverse sm:flex-row items-center sm:justify-end gap-3">
+                    <a href="{% url 'moderation:moderator_list' %}" class="w-full sm:w-auto text-center px-5 py-3 rounded-xl bg-slate-100 text-slate-600 text-xs font-bold hover:bg-slate-200 transition">
                         Cancel
                     </a>
-                    <button type="submit" class="px-6 py-3 bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                    <button type="submit" class="w-full sm:w-auto px-6 py-3 bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2">
                         <i data-lucide="user-check" class="w-4 h-4"></i>
                         <span>Provision Staff Account</span>
                     </button>

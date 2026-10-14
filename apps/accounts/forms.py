@@ -6,14 +6,14 @@ class CustomerRegistrationForm(forms.ModelForm):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'placeholder': '••••••••',
-            'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-slate-800'
+            'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-base sm:text-sm text-slate-800'
         }),
         min_length=8
     )
     confirm_password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'placeholder': '••••••••',
-            'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-slate-800'
+            'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-base sm:text-sm text-slate-800'
         })
     )
 
@@ -23,15 +23,15 @@ class CustomerRegistrationForm(forms.ModelForm):
         widgets = {
             'full_name': forms.TextInput(attrs={
                 'placeholder': 'e.g. Johnathan Adeyemi',
-                'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-slate-800'
+                'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-base sm:text-sm text-slate-800'
             }),
             'email': forms.EmailInput(attrs={
                 'placeholder': 'john@example.com',
-                'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-slate-800'
+                'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-base sm:text-sm text-slate-800'
             }),
             'phone': forms.TextInput(attrs={
                 'placeholder': '+234 801 234 5678',
-                'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-slate-800'
+                'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-base sm:text-sm text-slate-800'
             }),
         }
 
@@ -54,13 +54,13 @@ class LoginForm(forms.Form):
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
             'placeholder': 'your-email@example.com',
-            'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-slate-800'
+            'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-base sm:text-sm text-slate-800'
         })
     )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'placeholder': '••••••••',
-            'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-slate-800'
+            'class': 'w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-base sm:text-sm text-slate-800'
         })
     )
 
@@ -71,7 +71,7 @@ class OTPVerificationForm(forms.Form):
         min_length=6,
         widget=forms.TextInput(attrs={
             'placeholder': '123456',
-            'class': 'w-full text-center tracking-[0.5em] text-2xl font-bold font-mono px-4 py-4 rounded-xl border-2 border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-slate-900',
+            'class': 'w-full text-center tracking-[0.3em] sm:tracking-[0.5em] text-xl sm:text-2xl font-bold font-mono px-3 sm:px-4 py-3 sm:py-4 rounded-xl border-2 border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D87808] focus:border-transparent transition text-slate-900',
             'maxlength': '6',
             'autocomplete': 'one-time-code',
             'autofocus': 'autofocus'

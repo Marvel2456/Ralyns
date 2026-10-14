@@ -47,89 +47,93 @@
     </style>
     {% block extra_head %}{% endblock %}
 </head>
-<body class="flex h-full bg-[#0B0F19] antialiased" x-data="{ sidebarOpen: false }">
+<body class="min-h-screen bg-[#0B0F19] text-slate-100 flex flex-col lg:flex-row antialiased overflow-x-hidden" x-data="{ sidebarOpen: false }">
 
     <!-- Mobile Sidebar Backdrop -->
-    <div x-show="sidebarOpen" x-cloak class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" @click="sidebarOpen = false"></div>
+    <div 
+        x-show="sidebarOpen" 
+        x-cloak 
+        class="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden transition-opacity" 
+        @click="sidebarOpen = false"></div>
 
     <!-- Executive Sidebar -->
     <aside 
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-        class="fixed inset-y-0 left-0 z-50 w-72 bg-[#10182C] border-r border-slate-800/80 flex flex-col transition-transform duration-300 lg:static lg:translate-x-0">
+        class="fixed inset-y-0 left-0 z-50 w-72 bg-[#10182C] border-r border-slate-800/80 flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex-shrink-0 shadow-2xl lg:shadow-none">
         
         <!-- Sidebar Brand Header -->
-        <div class="h-20 flex items-center justify-between px-6 border-b border-slate-800/80">
+        <div class="h-16 sm:h-20 flex items-center justify-between px-5 sm:px-6 border-b border-slate-800/80">
             <a href="{% url 'owner:dashboard' %}" class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-white/10 p-1.5 rounded-xl border border-white/10">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 bg-white/10 p-1.5 rounded-xl border border-white/10 flex items-center justify-center">
                     <img src="/static/img/logo.png" alt="Ralyn's Logo" class="w-full h-full object-contain">
                 </div>
                 <div>
-                    <div class="text-lg font-black tracking-wider text-white">RALYN'S</div>
-                    <div class="text-[9px] tracking-[0.25em] font-bold text-amber-500 uppercase">OWNER CONSOLE</div>
+                    <div class="text-base sm:text-lg font-black tracking-wider text-white">RALYN'S</div>
+                    <div class="text-[8px] sm:text-[9px] tracking-[0.25em] font-bold text-amber-500 uppercase">OWNER CONSOLE</div>
                 </div>
             </a>
-            <button @click="sidebarOpen = false" class="lg:hidden text-slate-400 hover:text-white">
+            <button @click="sidebarOpen = false" class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white transition">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>
 
         <!-- Navigation Links -->
-        <nav class="flex-grow px-4 py-6 space-y-1.5 overflow-y-auto text-xs font-semibold">
+        <nav class="flex-grow px-3.5 sm:px-4 py-5 space-y-1.5 overflow-y-auto text-xs font-semibold">
             
             <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-1">Executive Overview</div>
             
-            <a href="{% url 'owner:dashboard' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if request.resolver_match.url_name == 'dashboard' %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+            <a href="{% url 'owner:dashboard' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if request.resolver_match.url_name == 'dashboard' %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
                 <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                 <span>Executive Dashboard</span>
             </a>
 
-            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-4">Staff & Governance</div>
+            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-3">Staff & Governance</div>
             
-            <a href="{% url 'owner:moderators' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'moderator' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+            <a href="{% url 'owner:moderators' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'moderator' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
                 <i data-lucide="shield-check" class="w-4 h-4"></i>
                 <span>Manage Moderators</span>
             </a>
 
-            <a href="{% url 'owner:audit_logs' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if request.resolver_match.url_name == 'audit_logs' %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+            <a href="{% url 'owner:audit_logs' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if request.resolver_match.url_name == 'audit_logs' %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
                 <i data-lucide="activity" class="w-4 h-4"></i>
                 <span>Staff Audit Trail</span>
             </a>
 
-            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-4">Cross-Border Logistics</div>
+            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-3">Cross-Border Logistics</div>
 
-            <a href="{% url 'owner:routes' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'route' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+            <a href="{% url 'owner:routes' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'route' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
                 <i data-lucide="git-fork" class="w-4 h-4"></i>
                 <span>Corridors & Rates</span>
             </a>
 
-            <a href="{% url 'owner:warehouses' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'warehouse' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+            <a href="{% url 'owner:warehouses' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'warehouse' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
                 <i data-lucide="warehouse" class="w-4 h-4"></i>
                 <span>Global Hubs</span>
             </a>
 
-            <a href="{% url 'owner:shipments' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'shipment' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+            <a href="{% url 'owner:shipments' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'shipment' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
                 <i data-lucide="package-search" class="w-4 h-4"></i>
                 <span>Waybill Cargo</span>
             </a>
 
-            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-4">Store & Commerce</div>
+            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-3">Store & Commerce</div>
 
-            <a href="{% url 'owner:products' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'product' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+            <a href="{% url 'owner:products' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'product' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
                 <i data-lucide="shopping-bag" class="w-4 h-4"></i>
                 <span>Products & WebP Images</span>
             </a>
 
-            <a href="{% url 'owner:orders' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'order' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+            <a href="{% url 'owner:orders' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if 'order' in request.resolver_match.url_name %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
                 <i data-lucide="receipt" class="w-4 h-4"></i>
                 <span>Store Orders</span>
             </a>
 
-            <a href="{% url 'owner:customers' %}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if request.resolver_match.url_name == 'customers' %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
+            <a href="{% url 'owner:customers' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {% if request.resolver_match.url_name == 'customers' %}bg-brand-orange text-white font-bold shadow-md shadow-orange-500/20{% else %}text-slate-300 hover:bg-white/5 hover:text-white{% endif %}">
                 <i data-lucide="users" class="w-4 h-4"></i>
                 <span>Customer Directory</span>
             </a>
 
-            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-4">System Links</div>
+            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-3">System Links</div>
 
             <a href="/admin/" target="_blank" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-white/5 hover:text-amber-400 transition">
                 <div class="flex items-center gap-3">
@@ -152,7 +156,7 @@
         <div class="p-4 border-t border-slate-800/80 bg-black/20">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center font-bold text-xs">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center font-bold text-xs flex-shrink-0">
                         👑
                     </div>
                     <div>
@@ -172,23 +176,23 @@
     <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
         
         <!-- Top Executive Navbar -->
-        <header class="h-20 bg-[#10182C]/80 backdrop-blur-md border-b border-slate-800/80 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
-            <div class="flex items-center gap-4">
-                <button @click="sidebarOpen = true" class="lg:hidden p-2 text-slate-400 hover:text-white">
+        <header class="h-16 sm:h-20 bg-[#10182C]/80 backdrop-blur-md border-b border-slate-800/80 px-3 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+            <div class="flex items-center gap-2.5 sm:gap-4 min-w-0">
+                <button @click="sidebarOpen = true" class="lg:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition flex-shrink-0" aria-label="Open sidebar menu">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
-                <div>
-                    <h2 class="text-lg font-bold text-white leading-tight">{% block header_title %}Owner's Command Center{% endblock %}</h2>
-                    <span class="text-xs text-slate-400">Ralyn's International Global Operations</span>
+                <div class="min-w-0">
+                    <h2 class="text-base sm:text-lg font-bold text-white leading-tight truncate">{% block header_title %}Owner's Command Center{% endblock %}</h2>
+                    <span class="text-[10px] sm:text-xs text-slate-400 hidden xs:inline">Ralyn's International Global Operations</span>
                 </div>
             </div>
 
-            <div class="flex items-center gap-3 sm:gap-4">
-                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+            <div class="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                     <span>Resend & Celery Active</span>
                 </div>
-                <a href="{% url 'core:home' %}" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs font-semibold border border-white/10 transition flex items-center gap-2">
+                <a href="{% url 'core:home' %}" target="_blank" class="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs font-semibold border border-white/10 transition flex items-center gap-1.5 sm:gap-2">
                     <i data-lucide="globe" class="w-3.5 h-3.5 text-brand-orange"></i>
                     <span>Live Site</span>
                 </a>
@@ -197,19 +201,19 @@
 
         <!-- Flash Messages -->
         {% if messages %}
-        <div class="px-4 sm:px-8 pt-4">
+        <div class="px-3.5 sm:px-8 pt-4">
             {% for message in messages %}
-            <div class="p-4 mb-3 rounded-2xl flex items-center justify-between text-xs font-semibold shadow-sm border 
+            <div class="p-3.5 sm:p-4 mb-3 rounded-2xl flex items-center justify-between text-xs font-semibold shadow-sm border 
                 {% if message.tags == 'error' %}bg-red-950/60 text-red-200 border-red-800
                 {% elif message.tags == 'success' %}bg-emerald-950/60 text-emerald-200 border-emerald-800
                 {% elif message.tags == 'warning' %}bg-amber-950/60 text-amber-200 border-amber-800
                 {% else %}bg-blue-950/60 text-blue-200 border-blue-800{% endif %}"
                 x-data="{ show: true }" x-show="show">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2.5">
                     <i data-lucide="info" class="w-4 h-4 flex-shrink-0"></i>
-                    <span>{{ message }}</span>
+                    <span class="leading-snug">{{ message }}</span>
                 </div>
-                <button @click="show = false" class="text-slate-400 hover:text-white">
+                <button @click="show = false" class="text-slate-400 hover:text-white p-1">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -218,12 +222,12 @@
         {% endif %}
 
         <!-- Main Body -->
-        <main class="p-4 sm:p-8 flex-grow">
+        <main class="p-3.5 sm:p-6 lg:p-8 flex-grow">
             {% block content %}{% endblock %}
         </main>
 
         <!-- Executive Footer -->
-        <footer class="p-6 border-t border-slate-800/80 text-center text-xs text-slate-500">
+        <footer class="p-4 sm:p-6 border-t border-slate-800/80 text-center text-xs text-slate-500">
             © 2026 Ralyn's International. All rights reserved. Developed by <a href="https://vextechafrica.com/" target="_blank" rel="noopener noreferrer" class="font-semibold text-amber-400 hover:text-brand-orange hover:underline">Vextech Limited</a>.
         </footer>
     </div>

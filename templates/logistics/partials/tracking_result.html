@@ -7,7 +7,7 @@
     <p class="text-xs text-red-700 max-w-md mx-auto">{{ error }}</p>
 </div>
 {% elif shipment %}
-<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6 animate-fade-in">
+<div class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-slate-200 shadow-sm space-y-6 animate-fade-in">
     
     <!-- Header Summary -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
@@ -18,7 +18,7 @@
                     {{ shipment.get_status_display }}
                 </span>
             </div>
-            <div class="text-2xl font-black font-mono text-slate-900 mt-1">{{ shipment.tracking_number }}</div>
+            <div class="text-xl sm:text-2xl font-black font-mono text-slate-900 mt-1 break-all">{{ shipment.tracking_number }}</div>
             <div class="text-xs text-slate-500 mt-0.5">Route: <strong>{{ shipment.route.origin_city }} → {{ shipment.route.destination_city }}</strong> ({{ shipment.route.get_freight_type_display }})</div>
         </div>
 

@@ -4,75 +4,75 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="relative bg-gradient-to-b from-[#10182C] via-[#151F38] to-[#10182C] text-white pt-16 pb-24 overflow-hidden">
+<section class="relative bg-gradient-to-b from-[#10182C] via-[#151F38] to-[#10182C] text-white pt-10 sm:pt-16 pb-16 sm:pb-24 overflow-hidden">
     <!-- Subtle Background Grid & Glows -->
     <div class="absolute inset-0 bg-[radial-gradient(#D87808_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
     <div class="absolute -top-32 -right-32 w-96 h-96 bg-[#D87808]/20 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-[#344054]/40 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
             <!-- Left Hero Content -->
-            <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-xs font-semibold text-amber-400">
+            <div class="lg:col-span-7 space-y-5 sm:space-y-6 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-[11px] sm:text-xs font-semibold text-amber-400">
                     <span class="w-2 h-2 rounded-full bg-brand-orange animate-ping"></span>
-                    Direct Freight Lines: China • Europe • USA • Nigeria
+                    <span>Direct Freight: China • Europe • USA • Nigeria</span>
                 </div>
 
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
                     Cross-Border <span class="text-brand-orange">Importation</span>, Cargo & Global E-Commerce.
                 </h1>
 
-                <p class="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
+                <p class="text-sm sm:text-base lg:text-lg text-slate-300 max-w-2xl leading-relaxed mx-auto lg:mx-0">
                     The modern trade gateway for smart importers and shoppers. We handle factory procurement, air express, consolidated sea cargo from China and Europe into Nigeria, plus outbound global exports.
                 </p>
 
-                <div class="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start pt-2">
-                    <a href="{% url 'accounts:register' %}" class="w-full sm:w-auto px-8 py-4 bg-brand-orange hover:bg-brand-hoverOrange text-white font-bold rounded-2xl shadow-lg shadow-orange-500/25 transition text-center flex items-center justify-center gap-2">
+                <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 justify-center lg:justify-start pt-2">
+                    <a href="{% url 'accounts:register' %}" class="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 bg-brand-orange hover:bg-brand-hoverOrange text-white text-sm sm:text-base font-bold rounded-2xl shadow-lg shadow-orange-500/25 transition text-center flex items-center justify-center gap-2">
                         <span>Get Your Overseas Address</span>
-                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        <i data-lucide="arrow-right" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     </a>
-                    <a href="{% url 'store:catalog' %}" class="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/15 text-white font-semibold rounded-2xl backdrop-blur-md border border-white/10 transition text-center flex items-center justify-center gap-2">
-                        <i data-lucide="shopping-bag" class="w-5 h-5 text-amber-400"></i>
+                    <a href="{% url 'store:catalog' %}" class="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 bg-white/10 hover:bg-white/15 text-white text-sm sm:text-base font-semibold rounded-2xl backdrop-blur-md border border-white/10 transition text-center flex items-center justify-center gap-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4 sm:w-5 sm:h-5 text-amber-400"></i>
                         <span>Shop Curated Store</span>
                     </a>
                 </div>
 
                 <!-- Fast Trust Stats -->
-                <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800/80">
+                <div class="grid grid-cols-3 gap-2 sm:gap-4 pt-5 sm:pt-6 border-t border-slate-800/80 text-center lg:text-left">
                     <div>
-                        <div class="text-2xl font-black text-white">3-5 Days</div>
-                        <div class="text-xs text-slate-400">Express Air Cargo</div>
+                        <div class="text-xl sm:text-2xl font-black text-white">3-5 Days</div>
+                        <div class="text-[10px] sm:text-xs text-slate-400">Express Air Cargo</div>
                     </div>
                     <div>
-                        <div class="text-2xl font-black text-brand-orange">100%</div>
-                        <div class="text-xs text-slate-400">Customs Clearance</div>
+                        <div class="text-xl sm:text-2xl font-black text-brand-orange">100%</div>
+                        <div class="text-[10px] sm:text-xs text-slate-400">Customs Clearance</div>
                     </div>
                     <div>
-                        <div class="text-2xl font-black text-white">4 Global</div>
-                        <div class="text-xs text-slate-400">Receiving Hubs</div>
+                        <div class="text-xl sm:text-2xl font-black text-white">4 Global</div>
+                        <div class="text-[10px] sm:text-xs text-slate-400">Receiving Hubs</div>
                     </div>
                 </div>
             </div>
 
             <!-- Right Interactive Hero Widget: Tracking & Quick Calculator -->
             <div class="lg:col-span-5" x-data="{ tab: 'track' }">
-                <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-2xl text-slate-900 border border-slate-100">
+                <div class="bg-white rounded-3xl p-5 sm:p-8 shadow-2xl text-slate-900 border border-slate-100">
                     
                     <!-- Segment Switcher -->
-                    <div class="flex p-1 bg-slate-100 rounded-2xl mb-6 font-semibold text-xs">
+                    <div class="flex p-1 bg-slate-100 rounded-2xl mb-5 sm:mb-6 font-semibold text-xs">
                         <button 
                             @click="tab = 'track'" 
                             :class="tab === 'track' ? 'bg-brand-navy text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'"
-                            class="flex-1 py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+                            class="flex-1 py-2 sm:py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 sm:gap-2">
                             <i data-lucide="search" class="w-4 h-4"></i>
                             <span>Track Shipment</span>
                         </button>
                         <button 
                             @click="tab = 'quote'" 
                             :class="tab === 'quote' ? 'bg-brand-navy text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'"
-                            class="flex-1 py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+                            class="flex-1 py-2 sm:py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 sm:gap-2">
                             <i data-lucide="calculator" class="w-4 h-4"></i>
                             <span>Instant Quote</span>
                         </button>
@@ -80,24 +80,24 @@
 
                     <!-- Tab 1: Live Waybill Search -->
                     <div x-show="tab === 'track'" x-cloak>
-                        <h3 class="text-lg font-bold text-slate-900 mb-1">Track Cargo Waybill</h3>
-                        <p class="text-xs text-slate-500 mb-5">Enter your Ralyn's tracking number (e.g. RAL-2026-XXXXXX)</p>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1">Track Cargo Waybill</h3>
+                        <p class="text-xs text-slate-500 mb-4 sm:mb-5">Enter your Ralyn's tracking number (e.g. RAL-2026-XXXXXX)</p>
 
                         <form action="{% url 'logistics:tracking' %}" method="GET" class="space-y-4">
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Tracking Code</label>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Tracking Code</label>
                                 <div class="relative">
                                     <input 
                                         type="text" 
                                         name="tracking_number" 
                                         placeholder="RAL-2026-..." 
                                         required 
-                                        class="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-orange text-slate-900 font-mono font-bold uppercase transition">
-                                    <i data-lucide="barcode" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+                                        class="w-full pl-11 pr-4 py-3 sm:py-3.5 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-orange text-slate-900 font-mono font-bold uppercase transition text-sm sm:text-base">
+                                    <i data-lucide="barcode" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3 sm:top-3.5"></i>
                                 </div>
                             </div>
 
-                            <button type="submit" class="w-full py-4 bg-brand-navy hover:bg-slate-800 text-white font-bold rounded-2xl shadow-md transition flex items-center justify-center gap-2">
+                            <button type="submit" class="w-full py-3.5 sm:py-4 bg-brand-navy hover:bg-slate-800 text-white font-bold rounded-2xl shadow-md transition flex items-center justify-center gap-2 text-sm sm:text-base">
                                 <i data-lucide="package-search" class="w-5 h-5 text-brand-orange"></i>
                                 <span>Track Cargo Live</span>
                             </button>
@@ -106,13 +106,13 @@
 
                     <!-- Tab 2: Instant Calculator Preview -->
                     <div x-show="tab === 'quote'" x-cloak>
-                        <h3 class="text-lg font-bold text-slate-900 mb-1">Fast Rate Estimator</h3>
-                        <p class="text-xs text-slate-500 mb-5">Calculate freight cost based on dynamic active routes</p>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1">Fast Rate Estimator</h3>
+                        <p class="text-xs text-slate-500 mb-4 sm:mb-5">Calculate freight cost based on dynamic active routes</p>
 
-                        <form hx-get="{% url 'logistics:calculator' %}" hx-target="#hero-calc-result" hx-trigger="change, keyup delay:300ms" class="space-y-4">
+                        <form hx-get="{% url 'logistics:calculator' %}" hx-target="#hero-calc-result" hx-trigger="change, keyup delay:300ms" class="space-y-3.5 sm:space-y-4">
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Shipping Route</label>
-                                <select name="route_id" class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-brand-orange text-sm font-medium text-slate-900">
+                                <select name="route_id" class="w-full px-3.5 py-2.5 sm:py-3 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-brand-orange text-xs sm:text-sm font-medium text-slate-900">
                                     <option value="">Select Origin & Destination...</option>
                                     {% for r in routes %}
                                     <option value="{{ r.id }}">{{ r.origin_city }} ({{ r.origin_country }}) → {{ r.destination_city }} ({{ r.get_freight_type_display }})</option>
@@ -120,19 +120,19 @@
                                 </select>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Weight (KG)</label>
-                                    <input type="number" step="0.5" min="1" name="weight_kg" value="5.0" class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-brand-orange text-sm font-semibold text-slate-900">
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Weight (KG)</label>
+                                    <input type="number" step="0.5" min="1" name="weight_kg" value="5.0" class="w-full px-3.5 py-2.5 sm:py-3 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-brand-orange text-sm font-semibold text-slate-900">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Volume (CBM)</label>
-                                    <input type="number" step="0.01" min="0" name="volume_cbm" value="0.0" class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-brand-orange text-sm font-semibold text-slate-900">
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Volume (CBM)</label>
+                                    <input type="number" step="0.01" min="0" name="volume_cbm" value="0.0" class="w-full px-3.5 py-2.5 sm:py-3 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-brand-orange text-sm font-semibold text-slate-900">
                                 </div>
                             </div>
 
-                            <div id="hero-calc-result" class="pt-2">
-                                <div class="p-3.5 bg-amber-50/80 rounded-2xl border border-amber-200 text-xs text-slate-700 flex items-center justify-between">
+                            <div id="hero-calc-result" class="pt-1 sm:pt-2">
+                                <div class="p-3 sm:p-3.5 bg-amber-50/80 rounded-2xl border border-amber-200 text-xs text-slate-700 flex items-center justify-between">
                                     <span>Select route above to calculate</span>
                                     <span class="font-bold text-brand-orange">--</span>
                                 </div>
@@ -269,24 +269,24 @@
 </section>
 
 <!-- Featured E-Commerce Store Drops -->
-<section class="py-20 bg-white">
+<section class="py-14 sm:py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-8 sm:mb-12 gap-4">
             <div>
                 <span class="text-xs font-bold tracking-widest text-brand-orange uppercase">Curated Store</span>
-                <h2 class="text-3xl font-extrabold text-brand-navy mt-1">Featured Imported Products</h2>
-                <p class="text-slate-600 text-sm mt-1">Directly imported goods ready for immediate dispatch across Nigeria.</p>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-navy mt-1">Featured Imported Products</h2>
+                <p class="text-slate-600 text-xs sm:text-sm mt-1">Directly imported goods ready for immediate dispatch across Nigeria.</p>
             </div>
-            <a href="{% url 'store:catalog' %}" class="inline-flex items-center gap-2 text-sm font-bold text-brand-orange hover:text-brand-hoverOrange">
+            <a href="{% url 'store:catalog' %}" class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-brand-orange hover:text-brand-hoverOrange">
                 <span>Browse All Products</span>
                 <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </a>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {% for product in featured_products %}
             <div class="bg-slate-50 rounded-3xl border border-slate-200 overflow-hidden flex flex-col group hover:shadow-lg transition">
-                <div class="h-48 bg-slate-200 relative overflow-hidden flex items-center justify-center">
+                <div class="h-44 sm:h-48 bg-slate-200 relative overflow-hidden flex items-center justify-center">
                     {% if product.display_image %}
                     <img src="{{ product.display_image }}" alt="{{ product.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     {% else %}
@@ -297,7 +297,7 @@
                     </span>
                 </div>
 
-                <div class="p-5 flex-grow flex flex-col justify-between">
+                <div class="p-4 sm:p-5 flex-grow flex flex-col justify-between">
                     <div>
                         <h3 class="font-bold text-slate-900 group-hover:text-brand-orange transition line-clamp-1">{{ product.title }}</h3>
                         <p class="text-xs text-slate-500 mt-1 line-clamp-2">{{ product.description }}</p>
@@ -305,22 +305,23 @@
 
                     <div class="mt-4 pt-4 border-t border-slate-200 flex items-center justify-between">
                         <div>
-                            <span class="text-xs text-slate-400 block font-medium">Price</span>
-                            <span class="text-lg font-black text-slate-900">₦{{ product.current_price|floatformat:2 }}</span>
+                            <span class="text-[10px] text-slate-400 block font-medium uppercase">Price</span>
+                            <span class="text-base sm:text-lg font-black text-slate-900">₦{{ product.current_price|floatformat:2 }}</span>
                         </div>
                         <button 
                             hx-post="{% url 'store:add_to_cart' product.id %}" 
                             hx-target="#cart-drawer-body"
                             @click="cartDrawerOpen = true"
-                            class="p-2.5 rounded-xl bg-brand-navy hover:bg-brand-orange text-white transition"
+                            class="p-2.5 rounded-xl bg-brand-navy hover:bg-brand-orange text-white transition flex items-center gap-1.5 text-xs font-bold"
                             title="Add to Cart">
                             <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span class="hidden xs:inline">Add</span>
                         </button>
                     </div>
                 </div>
             </div>
             {% empty %}
-            <div class="col-span-4 text-center py-12 bg-slate-50 rounded-3xl border border-dashed border-slate-300">
+            <div class="col-span-full text-center py-12 bg-slate-50 rounded-3xl border border-dashed border-slate-300">
                 <i data-lucide="shopping-bag" class="w-10 h-10 text-slate-400 mx-auto mb-2"></i>
                 <p class="text-sm font-semibold text-slate-700">Catalog items are loading...</p>
                 <p class="text-xs text-slate-400 mt-1">Visit our store to browse all import drops.</p>
@@ -332,17 +333,17 @@
 </section>
 
 <!-- Call To Action -->
-<section class="py-20 bg-brand-navy text-white text-center relative overflow-hidden">
+<section class="py-14 sm:py-20 bg-brand-navy text-white text-center relative overflow-hidden">
     <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl sm:text-4xl font-extrabold mb-4">Ready to Start Shipping or Shopping?</h2>
-        <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mb-8">
+        <h2 class="text-2xl sm:text-4xl font-extrabold mb-3 sm:mb-4">Ready to Start Shipping or Shopping?</h2>
+        <p class="text-slate-300 text-xs sm:text-base max-w-2xl mx-auto mb-6 sm:mb-8">
             Create your unified Ralyn's International account in under 60 seconds. Receive your overseas cargo address code immediately.
         </p>
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="{% url 'accounts:register' %}" class="w-full sm:w-auto px-8 py-4 bg-brand-orange hover:bg-brand-hoverOrange text-white font-bold rounded-2xl shadow-lg transition">
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            <a href="{% url 'accounts:register' %}" class="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 bg-brand-orange hover:bg-brand-hoverOrange text-white font-bold rounded-2xl shadow-lg transition text-sm sm:text-base">
                 Create Free Account
             </a>
-            <a href="{% url 'logistics:calculator' %}" class="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/15 text-white font-bold rounded-2xl border border-white/20 transition">
+            <a href="{% url 'logistics:calculator' %}" class="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 bg-white/10 hover:bg-white/15 text-white font-bold rounded-2xl border border-white/20 transition text-sm sm:text-base">
                 Open Freight Calculator
             </a>
         </div>

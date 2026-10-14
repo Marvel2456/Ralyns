@@ -3,10 +3,10 @@
 {% block title %}Operations Staff & Moderators | Admin Console{% endblock %}
 
 {% block content %}
-<div class="py-10 bg-slate-100 min-h-screen">
+<div class="py-6 sm:py-10 bg-slate-100 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
             <div>
                 <a href="{% url 'moderation:dashboard' %}" class="text-xs font-bold text-slate-500 hover:text-brand-navy flex items-center gap-1 mb-1">
                     ← Back to Operations Portal
@@ -15,33 +15,33 @@
                 <p class="text-xs text-slate-500">Authorized personnel who manage logistics, cargo checkpoints, and store orders.</p>
             </div>
 
-            <a href="{% url 'moderation:create_moderator' %}" class="px-5 py-3 bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-2">
+            <a href="{% url 'moderation:create_moderator' %}" class="self-start sm:self-auto px-4 sm:px-5 py-2.5 sm:py-3 bg-brand-orange hover:bg-brand-hoverOrange text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-2">
                 <i data-lucide="user-plus" class="w-4 h-4"></i>
                 <span>Provision New Moderator</span>
             </a>
         </div>
 
-        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+        <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-700">
+                <table class="w-full text-left text-sm text-slate-700 min-w-[650px]">
                     <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
                         <tr>
-                            <th class="px-6 py-4">Staff Member</th>
-                            <th class="px-6 py-4">Department</th>
-                            <th class="px-6 py-4">Assigned Rights</th>
-                            <th class="px-6 py-4">Contact</th>
-                            <th class="px-6 py-4">Status</th>
-                            <th class="px-6 py-4">Created</th>
+                            <th class="px-4 sm:px-6 py-3.5 sm:py-4">Staff Member</th>
+                            <th class="px-4 sm:px-6 py-3.5 sm:py-4">Department</th>
+                            <th class="px-4 sm:px-6 py-3.5 sm:py-4">Assigned Rights</th>
+                            <th class="px-4 sm:px-6 py-3.5 sm:py-4">Contact</th>
+                            <th class="px-4 sm:px-6 py-3.5 sm:py-4">Status</th>
+                            <th class="px-4 sm:px-6 py-3.5 sm:py-4">Created</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         {% for m in moderators %}
                         <tr class="hover:bg-slate-50 transition">
-                            <td class="px-6 py-4">
+                            <td class="px-4 sm:px-6 py-3.5 sm:py-4">
                                 <div class="font-bold text-slate-900">{{ m.full_name }}</div>
-                                <div class="text-xs text-slate-400">{{ m.email }}</div>
+                                <div class="text-xs text-slate-400 break-all">{{ m.email }}</div>
                             </td>
-                            <td class="px-6 py-4 text-xs font-semibold text-slate-800">
+                            <td class="px-4 sm:px-6 py-3.5 sm:py-4 text-xs font-semibold text-slate-800">
                                 {% if m.moderator_profile %}
                                 <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-brand-orange uppercase">
                                     {{ m.moderator_profile.get_department_display }}
@@ -50,7 +50,7 @@
                                 <span>General Staff</span>
                                 {% endif %}
                             </td>
-                            <td class="px-6 py-4 text-xs text-slate-600">
+                            <td class="px-4 sm:px-6 py-3.5 sm:py-4 text-xs text-slate-600">
                                 {% if m.moderator_profile %}
                                     {% if m.moderator_profile.can_manage_routes %}<span class="inline-block mr-1">✓ Routes</span>{% endif %}
                                     {% if m.moderator_profile.can_update_shipments %}<span class="inline-block mr-1">✓ Tracking</span>{% endif %}
@@ -59,13 +59,13 @@
                                     <span>All Permissions</span>
                                 {% endif %}
                             </td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-500">
+                            <td class="px-4 sm:px-6 py-3.5 sm:py-4 text-xs font-mono text-slate-500">
                                 {{ m.phone|default:"—" }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-4 sm:px-6 py-3.5 sm:py-4">
                                 <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 uppercase">Active</span>
                             </td>
-                            <td class="px-6 py-4 text-xs text-slate-400">
+                            <td class="px-4 sm:px-6 py-3.5 sm:py-4 text-xs text-slate-400">
                                 {{ m.created_at|date:"M d, Y" }}
                             </td>
                         </tr>

@@ -3,32 +3,32 @@
 {% block title %}Track Cargo Waybill | Ralyn's International{% endblock %}
 
 {% block content %}
-<div class="py-12 bg-[#F8FAFC]">
+<div class="py-8 sm:py-12 bg-[#F8FAFC]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div class="text-center mb-10">
+        <div class="text-center mb-8 sm:mb-10">
             <span class="text-xs font-bold tracking-widest text-brand-orange uppercase">Real-Time Logistics</span>
-            <h1 class="text-3xl font-extrabold text-brand-navy mt-1">Cargo & Package Waybill Tracker</h1>
-            <p class="text-slate-600 text-sm mt-2">Track your air express and sea cargo across international checkpoints.</p>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-brand-navy mt-1">Cargo & Package Waybill Tracker</h1>
+            <p class="text-slate-600 text-xs sm:text-sm mt-1 sm:mt-2">Track your air express and sea cargo across international checkpoints.</p>
         </div>
 
-        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 mb-8">
+        <div class="bg-white rounded-3xl p-4 sm:p-8 shadow-sm border border-slate-200 mb-6 sm:mb-8">
             <form action="{% url 'logistics:tracking' %}" method="GET" hx-get="{% url 'logistics:tracking' %}" hx-target="#tracking-display-area" class="space-y-4">
-                <div class="flex flex-col sm:flex-row gap-3">
+                <div class="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
                     <div class="relative flex-grow">
                         <input 
                             type="text" 
                             name="tracking_number" 
                             value="{{ tracking_number }}" 
-                            placeholder="Enter Tracking No (e.g. RAL-2026-XXXXXX)..." 
+                            placeholder="Tracking No (e.g. RAL-2026-XXXXXX)..." 
                             required 
-                            class="w-full pl-12 pr-4 py-4 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-orange text-base font-mono font-bold uppercase transition">
-                        <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-4 top-4"></i>
+                            class="w-full pl-11 pr-4 py-3.5 sm:py-4 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-orange text-sm sm:text-base font-mono font-bold uppercase transition">
+                        <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-3.5 sm:left-4 top-3.5 sm:top-4"></i>
                     </div>
 
-                    <button type="submit" class="px-8 py-4 bg-brand-orange hover:bg-brand-hoverOrange text-white font-bold rounded-2xl shadow-sm transition flex items-center justify-center gap-2">
-                        <i data-lucide="package-search" class="w-5 h-5"></i>
-                        <span>Track</span>
+                    <button type="submit" class="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 bg-brand-orange hover:bg-brand-hoverOrange text-white font-bold rounded-2xl shadow-sm transition flex items-center justify-center gap-2 text-sm sm:text-base">
+                        <i data-lucide="package-search" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                        <span>Track Cargo</span>
                     </button>
                 </div>
             </form>
