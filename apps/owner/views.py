@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.db.models import Sum, Count, Q
-from .forms import OwnerModeratorForm, OwnerWarehouseForm, OwnerProductForm
+from .forms import OwnerModeratorForm, OwnerModeratorEditForm, OwnerWarehouseForm, OwnerProductForm
 from apps.moderation.forms import RouteForm, ShipmentUpdateForm
 from apps.accounts.models import CustomUser, ModeratorProfile
 from apps.logistics.models import Route, Warehouse, Shipment, ShipmentCheckpoint
@@ -128,6 +128,40 @@ def toggle_moderator_status(request, user_id):
 
     messages.info(request, f"Moderator account for {user.full_name} has been {status_str}.")
     return redirect('owner:moderators')
+
+
+@login_required
+@owner_guard
+def moderator_edit_view(request, user_id):
+    """
+    Owner editing of moderator account credentials, contact, and granular operational permissions.
+    """
+    moderator_user = get_object_or_404(CustomUser, id=user_id, role=CustomUser.Role.MODERATOR)
+    # Ensure profile exists
+    ModeratorProfile.objects.get_or_create(user=moderator_user)
+
+    if request.method == 'POST':
+        form = OwnerModeratorEditForm(request.POST, user_instance=moderator_user)
+        if form.is_valid():
+            form.save()
+            dept_name = moderator_user.moderator_profile.get_department_display() if hasattr(moderator_user, 'moderator_profile') else 'Staff'
+            StaffActionLog.objects.create(
+                staff_user=request.user,
+                action_type="OWNER_UPDATED_MODERATOR",
+                target_reference=f"Staff: {moderator_user.email}",
+                details=f"Owner modified account and permissions for moderator {moderator_user.full_name} ({dept_name})"
+            )
+            messages.success(request, f"Moderator {moderator_user.full_name} ({moderator_user.email}) updated successfully!")
+            return redirect('owner:moderators')
+    else:
+        form = OwnerModeratorEditForm(user_instance=moderator_user)
+
+    context = {
+        'form': form,
+        'moderator_user': moderator_user,
+        'title': f"Edit Moderator: {moderator_user.full_name}",
+    }
+    return render(request, 'owner/moderator_form.html', context)
 
 
 @login_required

@@ -1,0 +1,230 @@
+{% extends 'owner/base_owner.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block header_title %}Staff & Moderator Governance{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+
+    <!-- Breadcrumb & Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <a href="{% url 'owner:moderators' %}" class="text-xs font-bold text-slate-400 hover:text-white flex items-center gap-1.5 mb-2 transition">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                <span>Back to Moderators Directory</span>
+            </a>
+            <h1 class="text-2xl font-extrabold text-white flex items-center gap-2.5">
+                <span>{{ moderator_user.full_name }}</span>
+                {% if moderator_user.is_active %}
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 uppercase tracking-wider">
+                    Active
+                </span>
+                {% else %}
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500/10 border border-red-500/20 text-red-400 uppercase tracking-wider">
+                    Suspended
+                </span>
+                {% endif %}
+            </h1>
+            <p class="text-xs text-slate-400 mt-1">Configure profile credentials, assigned department, and granular operational permissions.</p>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs">
+            <span class="px-3 py-1.5 rounded-xl bg-white/5 border border-slate-800 text-slate-300 font-mono">
+                Code: <strong class="text-brand-orange">{{ moderator_user.customer_code }}</strong>
+            </span>
+            <span class="text-slate-500">•</span>
+            <span class="text-slate-400">Created: {{ moderator_user.created_at|date:"M d, Y" }}</span>
+        </div>
+    </div>
+
+    <!-- Form Validation Errors (if any) -->
+    {% if form.errors %}
+    <div class="p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-300 text-xs space-y-1">
+        <div class="font-bold flex items-center gap-2">
+            <i data-lucide="alert-circle" class="w-4 h-4 text-red-400"></i>
+            <span>Please correct the errors below:</span>
+        </div>
+        <ul class="list-disc list-inside space-y-0.5 pl-2 text-slate-300">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li><strong class="text-white">{{ field.label }}:</strong> {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Main Edit Card -->
+    <div class="bg-[#10182C] rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-slate-800 shadow-xl text-white">
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+
+            <!-- Section 1: Staff Personal & Contact Details -->
+            <div>
+                <div class="flex items-center gap-2 pb-3 mb-4 border-b border-slate-800">
+                    <i data-lucide="user" class="w-4 h-4 text-brand-orange"></i>
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-white">Staff Member Information</h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Staff Full Name</label>
+                        {{ form.full_name }}
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Staff Email Address</label>
+                        {{ form.email }}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Phone / WhatsApp Number</label>
+                        {{ form.phone }}
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Department Assignment</label>
+                        {{ form.department }}
+                    </div>
+                </div>
+
+                <!-- Account Status Checkbox -->
+                <div class="mt-4 p-4 rounded-xl bg-black/20 border border-slate-800 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-bold text-white">Account Status (Active / Suspended)</div>
+                        <div class="text-[11px] text-slate-400">When inactive, this moderator cannot sign in or perform any actions.</div>
+                    </div>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        {{ form.is_active }}
+                        <span class="text-xs font-semibold text-slate-300">Account Active</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Section 2: Password Management -->
+            <div class="pt-2">
+                <div class="flex items-center gap-2 pb-3 mb-4 border-b border-slate-800">
+                    <i data-lucide="key" class="w-4 h-4 text-amber-400"></i>
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-white">Security & Password Reset</h2>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Reset Password (Optional)</label>
+                    {{ form.new_password }}
+                    <p class="text-[11px] text-slate-400 mt-1.5">
+                        Leave blank to preserve current password. Only enter text here if you want to reset this moderator's password (min 8 characters).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 3: Granular Operational Permissions -->
+            <div class="pt-2">
+                <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="shield" class="w-4 h-4 text-brand-orange"></i>
+                        <h2 class="text-sm font-bold uppercase tracking-wider text-white">Operational Permissions</h2>
+                    </div>
+                    <span class="text-[11px] text-slate-400 font-medium">Toggle access privileges</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    
+                    <!-- Route Management -->
+                    <label class="p-4 rounded-2xl bg-black/30 border border-slate-800 hover:border-slate-700 transition cursor-pointer flex items-start gap-3.5 group">
+                        <div class="pt-0.5">
+                            {{ form.can_manage_routes }}
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <div class="text-xs font-bold text-white group-hover:text-brand-orange transition flex items-center gap-1.5">
+                                <i data-lucide="git-fork" class="w-3.5 h-3.5 text-brand-orange"></i>
+                                <span>Shipping Routes & Rates</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1 leading-snug">
+                                Can create, adjust pricing, and activate/deactivate international cargo corridors.
+                            </p>
+                        </div>
+                    </label>
+
+                    <!-- Cargo Tracking & Status -->
+                    <label class="p-4 rounded-2xl bg-black/30 border border-slate-800 hover:border-slate-700 transition cursor-pointer flex items-start gap-3.5 group">
+                        <div class="pt-0.5">
+                            {{ form.can_update_shipments }}
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <div class="text-xs font-bold text-white group-hover:text-brand-orange transition flex items-center gap-1.5">
+                                <i data-lucide="package-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                <span>Cargo Tracking Updates</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1 leading-snug">
+                                Can record checkpoints, advance cargo status, and trigger automated Resend notification emails.
+                            </p>
+                        </div>
+                    </label>
+
+                    <!-- Products & Store Inventory -->
+                    <label class="p-4 rounded-2xl bg-black/30 border border-slate-800 hover:border-slate-700 transition cursor-pointer flex items-start gap-3.5 group">
+                        <div class="pt-0.5">
+                            {{ form.can_manage_products }}
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <div class="text-xs font-bold text-white group-hover:text-brand-orange transition flex items-center gap-1.5">
+                                <i data-lucide="shopping-bag" class="w-3.5 h-3.5 text-amber-400"></i>
+                                <span>Store & Products</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1 leading-snug">
+                                Can add imported items, adjust stock counts, pricing, and curate storefront categories.
+                            </p>
+                        </div>
+                    </label>
+
+                    <!-- Orders & Fulfillment -->
+                    <label class="p-4 rounded-2xl bg-black/30 border border-slate-800 hover:border-slate-700 transition cursor-pointer flex items-start gap-3.5 group">
+                        <div class="pt-0.5">
+                            {{ form.can_manage_orders }}
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <div class="text-xs font-bold text-white group-hover:text-brand-orange transition flex items-center gap-1.5">
+                                <i data-lucide="receipt" class="w-3.5 h-3.5 text-blue-400"></i>
+                                <span>Order Fulfillment</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1 leading-snug">
+                                Can view customer e-commerce orders, update fulfillment statuses, and verify delivery receipts.
+                            </p>
+                        </div>
+                    </label>
+
+                </div>
+            </div>
+
+            <!-- Section 4: Audit & Activity Summary -->
+            <div class="p-4 rounded-2xl bg-black/20 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-400">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="history" class="w-4 h-4 text-slate-500"></i>
+                    <span>Logged Operations Actions: <strong class="text-white">{{ moderator_user.action_logs.count }}</strong></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="clock" class="w-4 h-4 text-slate-500"></i>
+                    <span>Last Sign In: <strong class="text-white">{{ moderator_user.last_login|date:"M d, Y H:i"|default:"Never" }}</strong></span>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="pt-6 border-t border-slate-800 flex flex-col-reverse sm:flex-row items-center sm:justify-end gap-3">
+                <a href="{% url 'owner:moderators' %}" class="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold transition">
+                    Cancel
+                </a>
+                <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-brand-orange hover:bg-brand-hoverOrange active:scale-95 text-white text-xs font-bold rounded-xl shadow-lg shadow-orange-500/25 transition flex items-center justify-center gap-2">
+                    <i data-lucide="save" class="w-4 h-4"></i>
+                    <span>Save Moderator Changes</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

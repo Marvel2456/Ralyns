@@ -49,8 +49,6 @@
         <div class="mt-2.5 flex items-center gap-2">
             <button 
                 @click="show = false; cartDrawerOpen = true"
-                hx-get="{% url 'store:cart_drawer' %}"
-                hx-target="#cart-drawer-body"
                 class="px-3 py-1.5 rounded-lg bg-brand-navy hover:bg-slate-800 active:scale-95 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
                 <i data-lucide="shopping-cart" class="w-3.5 h-3.5 text-brand-orange"></i>
                 <span>View Cart</span>
@@ -66,4 +64,24 @@
     <button @click="show = false" class="absolute top-2.5 right-2.5 text-slate-400 hover:text-slate-600 p-1 rounded-lg transition" title="Dismiss">
         <i data-lucide="x" class="w-4 h-4"></i>
     </button>
+</div>
+
+<!-- Out of Band Updates for Cart Badges -->
+<span id="cart-badge-counter" 
+      hx-swap-oob="outerHTML" 
+      class="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-brand-orange text-white text-[11px] font-black rounded-full flex items-center justify-center shadow-md transition-all duration-300 {% if not cart.item_count or cart.item_count == 0 %}hidden{% endif %}">
+    {{ cart.item_count|default:0 }}
+</span>
+
+<span id="mobile-cart-badge-counter" 
+      hx-swap-oob="outerHTML" 
+      class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-brand-orange border border-amber-500/20">
+    {{ cart.item_count|default:0 }}
+</span>
+
+<!-- Out of Band Update for Cart Drawer Body -->
+<div id="cart-drawer-body" 
+     hx-swap-oob="innerHTML" 
+     class="p-4 sm:p-6 flex-grow overflow-y-auto">
+    {% include 'store/partials/cart_drawer_items.html' %}
 </div>

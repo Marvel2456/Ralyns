@@ -1,92 +1,14 @@
-{% if cart.items.all %}
-<div class="space-y-3">
-    {% for item in cart.items.all %}
-    <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-200 hover:border-slate-300 transition">
-        <!-- Product Thumbnail -->
-        <a href="{% url 'store:product_detail' item.product.slug %}" class="w-14 h-14 rounded-xl bg-white border border-slate-200 overflow-hidden flex-shrink-0 flex items-center justify-center p-0.5 block">
-            {% if item.product.display_image %}
-            <img src="{{ item.product.display_image }}" alt="{{ item.product.title }}" class="w-full h-full object-cover rounded-lg">
-            {% else %}
-            <i data-lucide="package" class="w-6 h-6 text-slate-300"></i>
-            {% endif %}
-        </a>
+{% include 'store/partials/cart_drawer_items.html' %}
 
-        <!-- Product Title & Pricing -->
-        <div class="flex-grow min-w-0">
-            <h4 class="text-xs font-bold text-slate-900 truncate" title="{{ item.product.title }}">
-                <a href="{% url 'store:product_detail' item.product.slug %}" class="hover:text-brand-orange transition">
-                    {{ item.product.title }}
-                </a>
-            </h4>
-            {% if item.variant %}
-            <div class="text-[10px] text-slate-500 font-medium truncate mt-0.5">{{ item.variant.name }}</div>
-            {% endif %}
-            <div class="text-xs font-black text-brand-navy mt-1">₦{{ item.unit_price|floatformat:2 }}</div>
-        </div>
+<!-- Out-of-band updates for cart badge counters on desktop and mobile -->
+<span id="cart-badge-counter" 
+      hx-swap-oob="outerHTML" 
+      class="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-brand-orange text-white text-[11px] font-black rounded-full flex items-center justify-center shadow-md transition-all duration-300 {% if not cart.item_count or cart.item_count == 0 %}hidden{% endif %}">
+    {{ cart.item_count|default:0 }}
+</span>
 
-        <!-- Quantity Adjuster -->
-        <div class="flex items-center gap-1 bg-white px-1.5 py-1 rounded-xl border border-slate-200 flex-shrink-0 shadow-sm">
-            <button 
-                hx-post="{% url 'store:update_cart_item' item.id %}" 
-                hx-vals='{"action": "decrease"}'
-                hx-target="#cart-drawer-body"
-                class="w-6 h-6 flex items-center justify-center text-slate-600 hover:text-slate-900 active:bg-slate-100 rounded-lg font-bold text-xs transition touch-manipulation"
-                title="Decrease quantity">
-                -
-            </button>
-            <span class="text-xs font-bold px-1.5 min-w-[16px] text-center">{{ item.quantity }}</span>
-            <button 
-                hx-post="{% url 'store:update_cart_item' item.id %}" 
-                hx-vals='{"action": "increase"}'
-                hx-target="#cart-drawer-body"
-                class="w-6 h-6 flex items-center justify-center text-slate-600 hover:text-slate-900 active:bg-slate-100 rounded-lg font-bold text-xs transition touch-manipulation"
-                title="Increase quantity">
-                +
-            </button>
-        </div>
-
-        <!-- Remove Button -->
-        <button 
-            hx-post="{% url 'store:update_cart_item' item.id %}" 
-            hx-vals='{"action": "remove"}'
-            hx-target="#cart-drawer-body"
-            class="p-2 text-slate-400 hover:text-red-500 active:bg-red-50 rounded-xl transition touch-manipulation flex-shrink-0"
-            title="Remove item">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-        </button>
-    </div>
-    {% endfor %}
-</div>
-
-<div class="mt-6 pt-6 border-t border-slate-200 space-y-3">
-    <div class="flex items-center justify-between text-xs text-slate-500">
-        <span>Items Subtotal</span>
-        <span class="font-bold text-slate-900">₦{{ cart.total_amount|floatformat:2 }}</span>
-    </div>
-
-    <div class="flex items-center justify-between text-sm font-bold text-slate-900">
-        <span>Estimated Total</span>
-        <span class="text-lg font-black text-brand-orange">₦{{ cart.total_amount|floatformat:2 }}</span>
-    </div>
-
-    <a href="{% url 'store:checkout' %}" class="w-full min-h-[48px] py-3.5 bg-brand-orange hover:bg-brand-hoverOrange text-white text-center font-bold rounded-xl shadow-md transition flex items-center justify-center gap-1.5">
-        <span>Proceed to Checkout</span>
-        <span>→</span>
-    </a>
-    {% if not request.user.is_authenticated %}
-    <p class="text-[11px] text-center text-slate-500 flex items-center justify-center gap-1 pt-0.5">
-        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i>
-        <span>Cart saved automatically upon account creation / sign in</span>
-    </p>
-    {% endif %}
-</div>
-{% else %}
-<div class="text-center py-16 text-slate-400">
-    <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-3 text-slate-300"></i>
-    <p class="text-sm font-bold text-slate-700">Your cart is currently empty</p>
-    <p class="text-xs text-slate-400 mt-1">Explore our curated store drops and add items.</p>
-    <a href="{% url 'store:catalog' %}" @click="cartDrawerOpen = false" class="mt-4 inline-block px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition">
-        Browse Store
-    </a>
-</div>
-{% endif %}
+<span id="mobile-cart-badge-counter" 
+      hx-swap-oob="outerHTML" 
+      class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-brand-orange border border-amber-500/20">
+    {{ cart.item_count|default:0 }}
+</span>

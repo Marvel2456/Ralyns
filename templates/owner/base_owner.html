@@ -133,23 +133,6 @@
                 <span>Customer Directory</span>
             </a>
 
-            <div class="text-[10px] font-bold tracking-widest uppercase text-slate-500 px-3 pb-2 pt-3">System Links</div>
-
-            <a href="/admin/" target="_blank" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-white/5 hover:text-amber-400 transition">
-                <div class="flex items-center gap-3">
-                    <i data-lucide="terminal" class="w-4 h-4 text-amber-500"></i>
-                    <span>Django Unfold Admin</span>
-                </div>
-                <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-500"></i>
-            </a>
-
-            <a href="{% url 'core:home' %}" target="_blank" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-white/5 hover:text-white transition">
-                <div class="flex items-center gap-3">
-                    <i data-lucide="globe" class="w-4 h-4"></i>
-                    <span>View Public Store</span>
-                </div>
-                <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-500"></i>
-            </a>
         </nav>
 
         <!-- Owner Profile Footer -->
@@ -188,10 +171,7 @@
             </div>
 
             <div class="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>Resend & Celery Active</span>
-                </div>
+                
                 <a href="{% url 'core:home' %}" target="_blank" class="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs font-semibold border border-white/10 transition flex items-center gap-1.5 sm:gap-2">
                     <i data-lucide="globe" class="w-3.5 h-3.5 text-brand-orange"></i>
                     <span>Live Site</span>

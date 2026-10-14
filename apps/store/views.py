@@ -11,12 +11,15 @@ from apps.core.emails import send_order_confirmation_email
 def _get_or_create_cart(request):
     """
     Helper to get the current cart from user or session.
+    Guarantees session persistence and cookie dispatch for anonymous guests.
     """
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=request.user)
     else:
         if not request.session.session_key:
             request.session.create()
+        request.session['has_cart'] = True
+        request.session.modified = True
         session_key = request.session.session_key
         cart, created = Cart.objects.get_or_create(session_key=session_key)
     return cart
@@ -99,7 +102,10 @@ def cart_drawer_view(request):
     Returns the slide-over cart drawer partial for HTMX.
     """
     cart = _get_or_create_cart(request)
-    return render(request, 'store/partials/cart_drawer_content.html', {'cart': cart})
+    return render(request, 'store/partials/cart_drawer_content.html', {
+        'cart': cart,
+        'cart_item_count': cart.item_count,
+    })
 
 
 def add_to_cart_view(request, product_id):
@@ -131,11 +137,11 @@ def add_to_cart_view(request, product_id):
 
     response = render(request, 'store/partials/toast_added.html', {
         'cart': cart,
+        'cart_item_count': cart.item_count,
         'product': product,
         'variant': variant,
         'quantity': quantity,
     })
-    # HTMX trigger to update the navbar cart badge counter
     response['HX-Trigger'] = 'cartUpdated'
     return response
 
@@ -190,7 +196,10 @@ def update_cart_item_view(request, item_id):
     elif action == 'remove':
         item.delete()
 
-    response = render(request, 'store/partials/cart_drawer_content.html', {'cart': cart})
+    response = render(request, 'store/partials/cart_drawer_content.html', {
+        'cart': cart,
+        'cart_item_count': cart.item_count,
+    })
     response['HX-Trigger'] = 'cartUpdated'
     return response
 

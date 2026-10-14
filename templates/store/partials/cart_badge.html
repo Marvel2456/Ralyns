@@ -1,7 +1,4 @@
 <span id="cart-badge-counter" 
-      hx-get="{% url 'store:cart_badge' %}" 
-      hx-trigger="cartUpdated from:body" 
-      hx-swap="outerHTML"
       class="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-brand-orange text-white text-[11px] font-black rounded-full flex items-center justify-center shadow-md transition-all duration-300 {% if not cart_item_count or cart_item_count == 0 %}hidden{% endif %}">
     {{ cart_item_count|default:0 }}
 </span>

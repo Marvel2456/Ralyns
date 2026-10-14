@@ -6,6 +6,7 @@ app_name = 'owner'
 urlpatterns = [
     path('', views.dashboard_view, name='dashboard'),
     path('moderators/', views.moderators_view, name='moderators'),
+    path('moderators/<uuid:user_id>/edit/', views.moderator_edit_view, name='moderator_edit'),
     path('moderators/<uuid:user_id>/toggle/', views.toggle_moderator_status, name='toggle_moderator'),
     path('routes/', views.routes_view, name='routes'),
     path('routes/new/', views.route_create_view, name='route_create'),

@@ -4,7 +4,25 @@
 {% block header_title %}Staff & Moderator Governance{% endblock %}
 
 {% block content %}
-<div class="space-y-8" x-data="{ createModalOpen: false }">
+<div class="space-y-8" 
+     x-data="{ 
+         createModalOpen: false,
+         confirmModalOpen: false,
+         confirmActionUrl: '',
+         confirmModeratorName: '',
+         confirmModeratorEmail: '',
+         confirmActionType: 'suspend',
+         openConfirm(url, name, email, type) {
+             this.confirmActionUrl = url;
+             this.confirmModeratorName = name;
+             this.confirmModeratorEmail = email;
+             this.confirmActionType = type;
+             this.confirmModalOpen = true;
+             this.$nextTick(() => {
+                 if (window.lucide) window.lucide.createIcons();
+             });
+         }
+     }">
 
     <!-- Header Actions -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -52,14 +70,36 @@
                             <span class="text-slate-400">General Staff</span>
                             {% endif %}
                         </td>
-                        <td class="px-5 sm:px-6 py-4 text-[11px] text-slate-400 space-y-0.5">
+                        <td class="px-5 sm:px-6 py-4 text-[11px] text-slate-400 space-y-1">
                             {% if m.moderator_profile %}
-                                {% if m.moderator_profile.can_manage_routes %}<div class="text-emerald-400 font-medium">✓ Route Management</div>{% endif %}
-                                {% if m.moderator_profile.can_update_shipments %}<div class="text-emerald-400 font-medium">✓ Cargo Tracking Updates</div>{% endif %}
-                                {% if m.moderator_profile.can_manage_products %}<div class="text-emerald-400 font-medium">✓ Store & Products</div>{% endif %}
-                                {% if m.moderator_profile.can_manage_orders %}<div class="text-emerald-400 font-medium">✓ Order Fulfillment</div>{% endif %}
+                                <div class="flex items-center gap-1.5">
+                                    {% if m.moderator_profile.can_manage_routes %}
+                                        <span class="inline-flex items-center gap-1 text-emerald-400 font-semibold"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Routes</span>
+                                    {% else %}
+                                        <span class="inline-flex items-center gap-1 text-slate-600 line-through"><i data-lucide="x" class="w-3 h-3 text-slate-600"></i> Routes</span>
+                                    {% endif %}
+                                    <span class="text-slate-700">•</span>
+                                    {% if m.moderator_profile.can_update_shipments %}
+                                        <span class="inline-flex items-center gap-1 text-emerald-400 font-semibold"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Shipments</span>
+                                    {% else %}
+                                        <span class="inline-flex items-center gap-1 text-slate-600 line-through"><i data-lucide="x" class="w-3 h-3 text-slate-600"></i> Shipments</span>
+                                    {% endif %}
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    {% if m.moderator_profile.can_manage_products %}
+                                        <span class="inline-flex items-center gap-1 text-emerald-400 font-semibold"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Products</span>
+                                    {% else %}
+                                        <span class="inline-flex items-center gap-1 text-slate-600 line-through"><i data-lucide="x" class="w-3 h-3 text-slate-600"></i> Products</span>
+                                    {% endif %}
+                                    <span class="text-slate-700">•</span>
+                                    {% if m.moderator_profile.can_manage_orders %}
+                                        <span class="inline-flex items-center gap-1 text-emerald-400 font-semibold"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Orders</span>
+                                    {% else %}
+                                        <span class="inline-flex items-center gap-1 text-slate-600 line-through"><i data-lucide="x" class="w-3 h-3 text-slate-600"></i> Orders</span>
+                                    {% endif %}
+                                </div>
                             {% else %}
-                            <div>Full Rights</div>
+                            <div class="text-slate-400 font-medium">Full Operations Access</div>
                             {% endif %}
                         </td>
                         <td class="px-5 sm:px-6 py-4 font-mono text-slate-400">
@@ -80,18 +120,27 @@
                             {{ m.created_at|date:"M d, Y" }}
                         </td>
                         <td class="px-5 sm:px-6 py-4 text-right">
-                            <form action="{% url 'owner:toggle_moderator' m.id %}" method="POST" class="inline">
-                                {% csrf_token %}
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="{% url 'owner:moderator_edit' m.id %}" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                                    <i data-lucide="edit-3" class="w-3.5 h-3.5 text-brand-orange"></i>
+                                    <span>Edit</span>
+                                </a>
                                 {% if m.is_active %}
-                                <button type="submit" onclick="return confirm('Suspend this moderator account?');" class="px-3 py-1.5 rounded-lg bg-red-950/60 hover:bg-red-900 border border-red-800 text-red-200 text-xs font-bold transition">
-                                    Suspend
+                                <button type="button" 
+                                        @click="openConfirm('{% url 'owner:toggle_moderator' m.id %}', '{{ m.full_name|escapejs }}', '{{ m.email|escapejs }}', 'suspend')" 
+                                        class="px-3 py-1.5 rounded-lg bg-red-950/60 hover:bg-red-900 border border-red-800 text-red-200 text-xs font-bold transition flex items-center gap-1.5 active:scale-95">
+                                    <i data-lucide="user-x" class="w-3.5 h-3.5 text-red-400"></i>
+                                    <span>Suspend</span>
                                 </button>
                                 {% else %}
-                                <button type="submit" class="px-3 py-1.5 rounded-lg bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-800 text-emerald-200 text-xs font-bold transition">
-                                    Reactivate
+                                <button type="button" 
+                                        @click="openConfirm('{% url 'owner:toggle_moderator' m.id %}', '{{ m.full_name|escapejs }}', '{{ m.email|escapejs }}', 'reactivate')" 
+                                        class="px-3 py-1.5 rounded-lg bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-800 text-emerald-200 text-xs font-bold transition flex items-center gap-1.5 active:scale-95">
+                                    <i data-lucide="user-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                    <span>Reactivate</span>
                                 </button>
                                 {% endif %}
-                            </form>
+                            </div>
                         </td>
                     </tr>
                     {% empty %}
@@ -186,6 +235,89 @@
                         </button>
                     </div>
                 </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Standard Confirmation Modal Dialog -->
+    <div x-show="confirmModalOpen" 
+         x-cloak 
+         @keydown.escape.window="confirmModalOpen = false"
+         class="fixed inset-0 z-50 overflow-y-auto" 
+         aria-labelledby="confirm-modal-title" 
+         role="dialog" 
+         aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen p-4 text-center">
+            
+            <!-- Backdrop with blur -->
+            <div class="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity" 
+                 @click="confirmModalOpen = false"
+                 x-transition:enter="ease-out duration-250"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"></div>
+
+            <!-- Modal Panel -->
+            <div class="inline-block bg-[#10182C] rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all my-8 max-w-md w-full border border-slate-800 p-6 sm:p-7 relative z-10 text-white"
+                 x-transition:enter="ease-out duration-250"
+                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave="ease-in duration-200"
+                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                
+                <div class="flex items-start gap-4">
+                    <!-- Icon Indicator -->
+                    <div :class="confirmActionType === 'suspend' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'" 
+                         class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 border">
+                        <template x-if="confirmActionType === 'suspend'">
+                            <i data-lucide="shield-alert" class="w-6 h-6 text-red-400"></i>
+                        </template>
+                        <template x-if="confirmActionType === 'reactivate'">
+                            <i data-lucide="shield-check" class="w-6 h-6 text-emerald-400"></i>
+                        </template>
+                    </div>
+
+                    <div class="flex-grow min-w-0">
+                        <h3 class="text-base sm:text-lg font-extrabold text-white leading-tight" id="confirm-modal-title">
+                            <span x-show="confirmActionType === 'suspend'">Suspend Moderator Account?</span>
+                            <span x-show="confirmActionType === 'reactivate'">Reactivate Moderator Account?</span>
+                        </h3>
+                        
+                        <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                            <span x-show="confirmActionType === 'suspend'">
+                                Are you sure you want to suspend <strong class="text-white" x-text="confirmModeratorName"></strong> (<span class="font-mono text-amber-400" x-text="confirmModeratorEmail"></span>)? 
+                                This staff member will immediately lose access to operations, cargo dispatch, routes, and store management.
+                            </span>
+                            <span x-show="confirmActionType === 'reactivate'">
+                                Are you sure you want to restore access for <strong class="text-white" x-text="confirmModeratorName"></strong> (<span class="font-mono text-emerald-400" x-text="confirmModeratorEmail"></span>)? 
+                                Their operational privileges and login will be reactivated immediately.
+                            </span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Action CTAs -->
+                <div class="mt-6 pt-5 border-t border-slate-800 flex items-center justify-end gap-3">
+                    <button type="button" 
+                            @click="confirmModalOpen = false" 
+                            class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold transition">
+                        Cancel
+                    </button>
+                    
+                    <form :action="confirmActionUrl" method="POST" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" 
+                                :class="confirmActionType === 'suspend' ? 'bg-red-600 hover:bg-red-700 shadow-red-500/25' : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/25'"
+                                class="px-5 py-2.5 rounded-xl text-white text-xs font-bold transition shadow-lg flex items-center gap-1.5 active:scale-95">
+                            <span x-show="confirmActionType === 'suspend'">Yes, Suspend Account</span>
+                            <span x-show="confirmActionType === 'reactivate'">Yes, Reactivate Account</span>
+                        </button>
+                    </form>
+                </div>
 
             </div>
         </div>

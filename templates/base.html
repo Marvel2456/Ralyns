@@ -51,6 +51,9 @@
         });
         document.addEventListener('htmx:afterSwap', function(evt) {
             if (window.lucide) window.lucide.createIcons();
+            if (window.Alpine && evt.detail && evt.detail.target) {
+                window.Alpine.initTree(evt.detail.target);
+            }
         });
     </script>
 
@@ -263,7 +266,7 @@
                         <i data-lucide="shopping-cart" class="w-4 h-4 text-brand-orange"></i>
                         <span>Shopping Cart</span>
                     </div>
-                    <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-brand-orange border border-amber-500/20">
+                    <span id="mobile-cart-badge-counter" class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-brand-orange border border-amber-500/20">
                         {{ cart_item_count|default:0 }}
                     </span>
                 </button>
@@ -350,7 +353,6 @@
     <!-- Slide-Over Cart Drawer (Fully responsive with pl-0 on mobile) -->
     <div x-show="cartDrawerOpen" 
          x-cloak 
-         x-init="$watch('cartDrawerOpen', value => { if (value && window.htmx) { htmx.ajax('GET', '{% url 'store:cart_drawer' %}', {target: '#cart-drawer-body', swap: 'innerHTML'}); } })"
          class="fixed inset-0 z-50 overflow-hidden" 
          aria-labelledby="slide-over-title" 
          role="dialog" 
@@ -368,10 +370,7 @@
                     </button>
                 </div>
                 <div id="cart-drawer-body" class="p-4 sm:p-6 flex-grow overflow-y-auto">
-                    <div class="text-center py-12 text-slate-400">
-                        <i data-lucide="loader-2" class="w-8 h-8 mx-auto animate-spin mb-2 text-brand-orange"></i>
-                        <p class="text-sm">Loading your cart items...</p>
-                    </div>
+                    {% include 'store/partials/cart_drawer_items.html' %}
                 </div>
             </div>
         </div>
@@ -395,10 +394,7 @@
                     <p class="text-sm text-slate-400 max-w-md leading-relaxed">
                         Cross-border cargo shipping, freight forwarding, procurement, customs clearance, and curated retail goods. Direct trade corridors between China, Europe, the USA, and Nigeria.
                     </p>
-                    <div class="flex items-center gap-3 text-xs text-slate-400 font-mono">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                        Resend SMTP Active • Celery Email Queue Ready
-                    </div>
+                    
                 </div>
 
                 <div>
