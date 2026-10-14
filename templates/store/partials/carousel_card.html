@@ -92,11 +92,11 @@
                     <span>Buy Now</span>
                 </a>
 
-                <!-- Add to Cart: HTMX Drawer Trigger -->
+                <!-- Add to Cart: Toast Notification -->
                 <button 
                     hx-post="{% url 'store:add_to_cart' product.id %}" 
-                    hx-target="#cart-drawer-body"
-                    @click="cartDrawerOpen = true"
+                    hx-target="#toast-container"
+                    hx-swap="innerHTML"
                     class="min-h-[42px] px-3.5 rounded-xl bg-slate-100 hover:bg-brand-navy hover:text-white text-slate-700 active:scale-95 transition flex items-center justify-center border border-slate-200"
                     title="Add to Shopping Cart">
                     <i data-lucide="shopping-cart" class="w-4 h-4"></i>

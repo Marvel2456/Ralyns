@@ -104,12 +104,15 @@ def cart_drawer_view(request):
 
 def add_to_cart_view(request, product_id):
     """
-    HTMX endpoint to add product/variant to cart and return drawer.
+    HTMX endpoint to add product/variant to cart and return a sleek toast notification.
     """
     cart = _get_or_create_cart(request)
     product = get_object_or_404(Product, id=product_id)
     variant_id = request.POST.get('variant_id')
-    quantity = int(request.POST.get('quantity', 1))
+    try:
+        quantity = int(request.POST.get('quantity', 1))
+    except (ValueError, TypeError):
+        quantity = 1
 
     variant = None
     if variant_id:
@@ -126,7 +129,12 @@ def add_to_cart_view(request, product_id):
         cart_item.quantity += quantity
         cart_item.save()
 
-    response = render(request, 'store/partials/cart_drawer_content.html', {'cart': cart})
+    response = render(request, 'store/partials/toast_added.html', {
+        'cart': cart,
+        'product': product,
+        'variant': variant,
+        'quantity': quantity,
+    })
     # HTMX trigger to update the navbar cart badge counter
     response['HX-Trigger'] = 'cartUpdated'
     return response

@@ -42,6 +42,18 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.lucide) window.lucide.createIcons();
+        });
+        document.addEventListener('htmx:configRequest', function(evt) {
+            evt.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        });
+        document.addEventListener('htmx:afterSwap', function(evt) {
+            if (window.lucide) window.lucide.createIcons();
+        });
+    </script>
+
     <style>
         [x-cloak] { display: none !important; }
         .htmx-indicator { display: none; }
@@ -52,6 +64,9 @@
 </head>
 <body class="flex flex-col min-h-screen text-slate-800 antialiased" x-data="{ mobileMenuOpen: false, cartDrawerOpen: false }">
     
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-20 right-3 sm:right-6 z-[80] max-w-sm w-full pointer-events-none space-y-3"></div>
+
     <!-- Top Bar -->
     <div class="bg-brand-navy text-slate-300 text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-slate-800">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-1.5 sm:gap-2 text-center sm:text-left">
@@ -333,7 +348,13 @@
     </main>
 
     <!-- Slide-Over Cart Drawer (Fully responsive with pl-0 on mobile) -->
-    <div x-show="cartDrawerOpen" x-cloak class="fixed inset-0 z-50 overflow-hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+    <div x-show="cartDrawerOpen" 
+         x-cloak 
+         x-init="$watch('cartDrawerOpen', value => { if (value && window.htmx) { htmx.ajax('GET', '{% url 'store:cart_drawer' %}', {target: '#cart-drawer-body', swap: 'innerHTML'}); } })"
+         class="fixed inset-0 z-50 overflow-hidden" 
+         aria-labelledby="slide-over-title" 
+         role="dialog" 
+         aria-modal="true">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" @click="cartDrawerOpen = false"></div>
         <div class="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
             <div class="w-screen max-w-full sm:max-w-md bg-white shadow-2xl flex flex-col" @click.outside="cartDrawerOpen = false">

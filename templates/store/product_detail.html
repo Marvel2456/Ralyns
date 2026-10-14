@@ -41,8 +41,8 @@
                         <!-- Add To Cart Form -->
                         <form 
                             hx-post="{% url 'store:add_to_cart' product.id %}" 
-                            hx-target="#cart-drawer-body"
-                            @submit="cartDrawerOpen = true"
+                            hx-target="#toast-container"
+                            hx-swap="innerHTML"
                             class="space-y-4">
                             {% csrf_token %}
 
