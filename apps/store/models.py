@@ -84,6 +84,19 @@ class Product(BaseUUIDModel):
         return self.discount_price if self.discount_price else self.base_price
 
     @property
+    def discount_amount(self):
+        if self.discount_price and self.base_price and self.base_price > self.discount_price:
+            return self.base_price - self.discount_price
+        return Decimal('0.00')
+
+    @property
+    def discount_percent(self):
+        if self.discount_price and self.base_price and self.base_price > self.discount_price:
+            percent = ((self.base_price - self.discount_price) / self.base_price) * 100
+            return int(round(percent))
+        return 0
+
+    @property
     def display_image(self):
         if self.image:
             return self.image.url

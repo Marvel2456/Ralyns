@@ -120,6 +120,36 @@ def add_to_cart_view(request, product_id):
     return response
 
 
+def buy_now_view(request, product_id):
+    """
+    Direct 'Buy Now' flow: adds item to cart and immediately redirects to checkout.
+    """
+    cart = _get_or_create_cart(request)
+    product = get_object_or_404(Product, id=product_id)
+    variant_id = request.POST.get('variant_id') or request.GET.get('variant_id')
+    try:
+        quantity = int(request.POST.get('quantity', request.GET.get('quantity', 1)))
+    except (ValueError, TypeError):
+        quantity = 1
+
+    variant = None
+    if variant_id:
+        variant = ProductVariant.objects.filter(id=variant_id, product=product).first()
+
+    cart_item, created = CartItem.objects.get_or_create(
+        cart=cart,
+        product=product,
+        variant=variant,
+        defaults={'quantity': quantity}
+    )
+
+    if not created:
+        cart_item.quantity += quantity
+        cart_item.save()
+
+    return redirect('store:checkout')
+
+
 def update_cart_item_view(request, item_id):
     """
     HTMX endpoint to adjust item quantity or delete from cart.

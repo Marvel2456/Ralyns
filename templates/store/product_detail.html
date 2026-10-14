@@ -57,16 +57,26 @@
                             </div>
                             {% endif %}
 
-                            <div class="flex items-center gap-3 pt-2">
-                                <div class="w-24 sm:w-28 flex-shrink-0">
+                            <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+                                <div class="w-full sm:w-28 flex-shrink-0">
                                     <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Quantity</label>
                                     <input type="number" name="quantity" value="1" min="1" max="50" class="w-full px-2.5 sm:px-3 py-3 rounded-xl border border-slate-300 text-center font-bold text-slate-900 text-sm sm:text-base">
                                 </div>
 
-                                <div class="flex-grow pt-4 sm:pt-5">
-                                    <button type="submit" class="w-full py-3.5 bg-brand-orange hover:bg-brand-hoverOrange text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2 text-sm sm:text-base">
-                                        <i data-lucide="shopping-cart" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                                        <span>Add to Cart</span>
+                                <div class="flex-grow flex items-center gap-2.5 w-full pt-1 sm:pt-5">
+                                    <button type="submit" 
+                                            formaction="{% url 'store:buy_now' product.id %}" 
+                                            formmethod="POST" 
+                                            hx-disable 
+                                            class="flex-1 py-3.5 bg-brand-orange hover:bg-brand-hoverOrange active:scale-95 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2 text-sm sm:text-base">
+                                        <i data-lucide="zap" class="w-4 h-4 fill-white"></i>
+                                        <span>Buy Now</span>
+                                    </button>
+                                    <button type="submit" 
+                                            class="py-3.5 px-4 sm:px-5 bg-slate-100 hover:bg-brand-navy hover:text-white text-slate-800 font-bold rounded-xl transition flex items-center justify-center gap-2 text-sm sm:text-base border border-slate-200"
+                                            title="Add to Shopping Cart">
+                                        <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                                        <span class="hidden sm:inline">Add to Cart</span>
                                     </button>
                                 </div>
                             </div>
