@@ -16,6 +16,20 @@
 
         <div class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-sm border border-slate-200">
             
+            {% if has_cart_items or next_url %}
+            <div class="p-3.5 bg-emerald-50 rounded-xl sm:rounded-2xl border border-emerald-200 text-xs text-emerald-900 mb-4 flex items-start gap-2.5 shadow-sm">
+                <div class="w-6 h-6 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0 text-emerald-700 mt-0.5">
+                    <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                </div>
+                <div>
+                    <span class="font-bold text-emerald-950 block">Your shopping cart is safely saved!</span>
+                    <span class="text-emerald-800">
+                        Create your account in seconds and you'll go straight to checkout with all your selected items preserved.
+                    </span>
+                </div>
+            </div>
+            {% endif %}
+
             <div class="p-3 sm:p-3.5 bg-amber-50 rounded-xl sm:rounded-2xl border border-amber-200 text-xs text-amber-900 mb-5 sm:mb-6 flex items-start gap-2.5">
                 <i data-lucide="shield-check" class="w-4 h-4 text-brand-orange flex-shrink-0 mt-0.5"></i>
                 <span>You will instantly receive an exclusive <strong>RAL-XXXX</strong> Cargo Mailbox Code and an email OTP verification code upon signup.</span>
@@ -23,6 +37,9 @@
 
             <form method="POST" class="space-y-4">
                 {% csrf_token %}
+                {% if next_url %}
+                <input type="hidden" name="next" value="{{ next_url }}">
+                {% endif %}
                 
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Full Name</label>
@@ -71,7 +88,7 @@
 
             <div class="mt-6 pt-6 border-t border-slate-100 text-center text-xs text-slate-500">
                 Already have an account? 
-                <a href="{% url 'accounts:login' %}" class="font-bold text-brand-orange hover:underline">Sign In here</a>
+                <a href="{% url 'accounts:login' %}{% if next_url %}?next={{ next_url }}{% endif %}" class="font-bold text-brand-orange hover:underline">Sign In here</a>
             </div>
         </div>
 

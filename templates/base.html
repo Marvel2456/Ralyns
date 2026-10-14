@@ -115,6 +115,7 @@
                         title="View Cart"
                         aria-label="Shopping Cart">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        {% include 'store/partials/cart_badge.html' %}
                     </button>
 
                     <!-- Authentication / Account (Desktop & Tablet) -->
@@ -238,6 +239,19 @@
                     <i data-lucide="shopping-bag" class="w-4 h-4 text-brand-orange"></i>
                     <span>Store Catalog</span>
                 </a>
+                <button 
+                    @click="mobileMenuOpen = false; cartDrawerOpen = true"
+                    hx-get="{% url 'store:cart_drawer' %}"
+                    hx-target="#cart-drawer-body"
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 transition text-slate-800 font-semibold text-sm">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="shopping-cart" class="w-4 h-4 text-brand-orange"></i>
+                        <span>Shopping Cart</span>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-brand-orange border border-amber-500/20">
+                        {{ cart_item_count|default:0 }}
+                    </span>
+                </button>
             </div>
 
             <!-- Role & Account Actions for Authenticated Users -->

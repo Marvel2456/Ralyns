@@ -7,11 +7,20 @@ from .models import CustomUser, EmailOTP
 from .forms import CustomerRegistrationForm, LoginForm, OTPVerificationForm
 from apps.core.emails import send_account_otp_email
 from apps.logistics.models import Shipment, Warehouse
-from apps.store.models import Order
+from apps.store.models import Order, Cart
+from apps.store.services import merge_session_cart
 
 def register_view(request):
     if request.user.is_authenticated:
         return redirect('accounts:dashboard')
+
+    next_url = request.GET.get('next') or request.POST.get('next') or ''
+    if not request.session.session_key:
+        request.session.create()
+    current_session_key = request.session.session_key
+
+    guest_cart = Cart.objects.filter(session_key=current_session_key).first() if current_session_key else None
+    has_cart_items = bool(guest_cart and guest_cart.items.exists())
 
     if request.method == 'POST':
         form = CustomerRegistrationForm(request.POST)
@@ -28,12 +37,22 @@ def register_view(request):
             send_account_otp_email(user, otp.code)
 
             request.session['pending_verification_user_id'] = str(user.id)
+            if next_url:
+                request.session['auth_redirect_next'] = next_url
+            if current_session_key:
+                request.session['pre_auth_cart_session_key'] = current_session_key
+
             messages.success(request, f"Account created! We've sent a 6-digit verification code to {user.email}.")
             return redirect('accounts:verify_otp')
     else:
         form = CustomerRegistrationForm()
 
-    return render(request, 'accounts/register.html', {'form': form})
+    return render(request, 'accounts/register.html', {
+        'form': form,
+        'next_url': next_url,
+        'has_cart_items': has_cart_items,
+        'guest_cart': guest_cart,
+    })
 
 
 def verify_otp_view(request):
@@ -62,10 +81,28 @@ def verify_otp_view(request):
                 user.is_email_verified = True
                 user.save()
 
-                # Clean session & log user in
-                del request.session['pending_verification_user_id']
+                # Retrieve saved cart session key & next redirect destination
+                saved_cart_key = request.session.get('pre_auth_cart_session_key') or request.session.session_key
+                next_url = request.session.get('auth_redirect_next')
+
+                # Clean session pending state
+                request.session.pop('pending_verification_user_id', None)
+                request.session.pop('auth_redirect_next', None)
+                request.session.pop('pre_auth_cart_session_key', None)
+
+                # Log user in
                 login(request, user)
+
+                # Transfer all items from guest cart to user account
+                if saved_cart_key:
+                    merge_session_cart(user, saved_cart_key)
+                if request.session.session_key and request.session.session_key != saved_cart_key:
+                    merge_session_cart(user, request.session.session_key)
+
                 messages.success(request, f"Welcome to Ralyn's International, {user.full_name}! Your account is verified.")
+
+                if next_url and next_url.startswith('/'):
+                    return redirect(next_url)
                 return redirect('accounts:dashboard')
             else:
                 messages.error(request, "Invalid or expired verification code. Please try again or request a new code.")
@@ -92,6 +129,11 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('accounts:dashboard')
 
+    next_url = request.GET.get('next') or request.POST.get('next') or ''
+    current_session_key = request.session.session_key
+    guest_cart = Cart.objects.filter(session_key=current_session_key).first() if current_session_key else None
+    has_cart_items = bool(guest_cart and guest_cart.items.exists())
+
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -103,16 +145,27 @@ def login_view(request):
                 if not user.is_active:
                     messages.error(request, "Your account has been deactivated. Please contact support.")
                 elif not user.is_email_verified:
-                    # Resend OTP and redirect to verify
                     request.session['pending_verification_user_id'] = str(user.id)
+                    if next_url:
+                        request.session['auth_redirect_next'] = next_url
+                    if current_session_key:
+                        request.session['pre_auth_cart_session_key'] = current_session_key
                     otp = EmailOTP.create_otp(user=user, purpose=EmailOTP.Purpose.REGISTRATION)
                     send_account_otp_email(user, otp.code)
                     messages.warning(request, "Please verify your email address to access your account.")
                     return redirect('accounts:verify_otp')
                 else:
+                    saved_session_key = request.session.session_key
                     login(request, user)
+
+                    # Merge guest cart into user account
+                    if saved_session_key:
+                        merge_session_cart(user, saved_session_key)
+
                     messages.success(request, f"Welcome back, {user.full_name}!")
                     
+                    if next_url and next_url.startswith('/'):
+                        return redirect(next_url)
                     if user.is_moderator:
                         return redirect('moderation:dashboard')
                     return redirect('accounts:dashboard')
@@ -121,7 +174,12 @@ def login_view(request):
     else:
         form = LoginForm()
 
-    return render(request, 'accounts/login.html', {'form': form})
+    return render(request, 'accounts/login.html', {
+        'form': form,
+        'next_url': next_url,
+        'has_cart_items': has_cart_items,
+        'guest_cart': guest_cart,
+    })
 
 
 def logout_view(request):

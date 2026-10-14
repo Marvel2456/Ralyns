@@ -1,5 +1,6 @@
 from decimal import Decimal
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
@@ -80,6 +81,17 @@ def product_detail_view(request, slug):
         'cart': cart,
     }
     return render(request, 'store/product_detail.html', context)
+
+
+def cart_badge_view(request):
+    """
+    Returns the reactive cart badge counter partial for HTMX.
+    """
+    cart = _get_or_create_cart(request)
+    return render(request, 'store/partials/cart_badge.html', {
+        'cart': cart,
+        'cart_item_count': cart.item_count,
+    })
 
 
 def cart_drawer_view(request):
@@ -175,12 +187,26 @@ def update_cart_item_view(request, item_id):
     return response
 
 
-@login_required
 def checkout_view(request):
     """
     Customer checkout page and order creation with email dispatch.
+    Guests are prompted to create an account or sign in with their cart intact.
     """
     cart = _get_or_create_cart(request)
+
+    if not request.user.is_authenticated:
+        if cart.items.count() == 0:
+            messages.warning(request, "Your cart is currently empty.")
+            return redirect('store:catalog')
+
+        # Ensure session key exists and is saved
+        if not request.session.session_key:
+            request.session.create()
+        request.session['pre_auth_cart_session_key'] = request.session.session_key
+        request.session['auth_redirect_next'] = request.path
+
+        messages.info(request, "Please create a free account or sign in to complete your checkout. All your cart items have been safely saved!")
+        return redirect(f"{reverse('accounts:register')}?next={request.path}")
 
     if cart.items.count() == 0:
         messages.warning(request, "Your cart is currently empty.")

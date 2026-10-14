@@ -56,6 +56,12 @@
         <span>Proceed to Checkout</span>
         <span>→</span>
     </a>
+    {% if not request.user.is_authenticated %}
+    <p class="text-[11px] text-center text-slate-500 flex items-center justify-center gap-1 pt-0.5">
+        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i>
+        <span>Cart saved automatically upon account creation / sign in</span>
+    </p>
+    {% endif %}
 </div>
 {% else %}
 <div class="text-center py-16 text-slate-400">
